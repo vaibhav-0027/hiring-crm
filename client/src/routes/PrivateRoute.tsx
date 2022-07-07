@@ -28,11 +28,11 @@ const PrivateRoute = (props: PrivateRouteType) => {
     }, []);
 
     return (
-        <div className='flex flex-col h-screen w-screen'>
-            <div className='h-14 w-full'>
+        <div className='flex flex-col h-screen w-screen overflow-x-hidden overflow-y-auto'>
+            <div className='h-14 max-h-14 w-full'>
                 <Navbar />
             </div>
-            <div className='h-full w-full flex flex-row'>
+            <div className='h-full  flex flex-row'>
                 <Drawer />
                 <Route
                     exact={exact}

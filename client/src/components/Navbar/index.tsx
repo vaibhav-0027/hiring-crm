@@ -53,7 +53,7 @@ const Navbar = () => {
     }
 
     return (
-        <AppBar position="static" className='bg-primary h-full' >
+        <AppBar position="fixed" className='bg-primary' >
             <Toolbar variant="dense">
                 <div className='w-full h-full flex flex-row'>
                     <div className='w-1/2 flex items-center justify-end cursor-pointer'>

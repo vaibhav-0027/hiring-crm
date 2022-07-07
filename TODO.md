@@ -18,7 +18,9 @@
 <li><s>set up the base react application</s></li>
 <li><s>authenticate with firebase</s></li>
 <li><s>create users directly on firebase</s></li>
-<li>create companies page</li>
+<li><s>create companies page</s></li>
+<li>create modal for creating and editing company</li>
+<li>create contacts page</li>
 <li></li>
 
 
