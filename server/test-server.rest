@@ -1,0 +1,74 @@
+GET http://localhost:8080/api/company/all
+
+###
+
+POST http://localhost:8080/api/candidate/new HTTP/1.1
+Content-Type: application/json
+
+{
+    "status": 1,
+    "vacancyId": "0e683a6f-fcf0-11ec-a892-b4b686e7753d",
+    "clientId": "fffdcfad-fcef-11ec-a892-b4b686e7753d"
+}
+
+# {
+#     "name": "Karan Bajaj",
+#     "email": "karan.bajaj@esyhire.com",
+#     "companyId": "ab265781-fcee-11ec-be8b-b4b686e7753d"
+# }
+
+# {
+#     "name": "EsyHire",
+#     "url": "esyhire.herokuapp.com"
+# }
+# id: ab265781-fcee-11ec-be8b-b4b686e7753d
+
+# {
+#     "roleName": "SDE1",
+#     "packageMin": 20,
+#     "countOpen": 2,
+#     "isOpen": true,
+#     "companyId": "ab265781-fcee-11ec-be8b-b4b686e7753d"
+# }
+# id: 0e683a6f-fcf0-11ec-a892-b4b686e7753d
+
+# {
+#     "name": "Vaibhav Dhingra",
+#     "email": "vaibhavdhingra10@gmail.com",
+#     "description": "good candidate",
+#     "mobileNumber": 7814664315,
+#     "currentPackage": 54,
+#     "expectedPackage": 55.6,
+#     "linkedin_url": "https://linkedin.com/vaibhav-0027"
+# }
+# id: fffdcfad-fcef-11ec-a892-b4b686e7753d
+
+###
+
+GET http://localhost:8080/api/vacancy/company/44fe02da-fce4-11ec-a802-b4b686e7753d HTTP/1.1
+Content-Type: application/json
+
+###
+
+GET http://localhost:8080/api/company-client/company/ab265781-fcee-11ec-be8b-b4b686e7753d HTTP/1.1
+Content-Type: application/json
+
+###
+
+PUT http://localhost:8080/api/client/d61e7e33-fcec-11ec-8543-b4b686e7753d HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "Vaibhav Dhingra",
+    "email": "vaibhavdhingra10@gmail.com",
+    "description": "good candidate",
+    "mobileNumber": 7814664315,
+    "currentPackage": 54,
+    "expectedPackage": 55.8,
+    "linkedin_url": "https://linkedin.com/vaibhav-0027"
+}
+
+###
+
+DELETE http://localhost:8080/api/candidate/8b301108-fce4-11ec-a802-b4b686e7753d HTTP/1.1
+Content-Type: application/json
