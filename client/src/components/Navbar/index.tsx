@@ -2,13 +2,25 @@ import { AppBar, IconButton, Menu, MenuItem, Toolbar, Typography } from '@mui/ma
 import React, { useEffect, useState } from 'react'
 import { Link, useHistory } from 'react-router-dom';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import { clearUserInfo } from '../../helpers/localStorageHandler';
+import { clearUserInfo, getUserInfo } from '../../helpers/localStorageHandler';
 import { auth } from '../../helpers/firebase';
 import { signOut } from "firebase/auth";
 
 const Navbar = () => {
     const history = useHistory();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const [userName, setUserName] = useState<string>('User');
+
+    useEffect(() => {
+        const run = async () => {
+            const userInfo = await getUserInfo();
+            if (userInfo !== {}) {
+                setUserName(userInfo.providerData[0]?.displayName || "User")
+            }
+        }
+
+        run();
+    }, []);
 
     useEffect(() => {
         auth.onAuthStateChanged((user) => {
@@ -79,6 +91,7 @@ const Navbar = () => {
                             open={Boolean(anchorEl)}
                             onClose={_handleClose}
                         >
+                            <MenuItem>Hi, {userName}</MenuItem>
                             <MenuItem onClick={_profileClickHandler}>Profile</MenuItem>
                             <MenuItem onClick={_logoutClickHandler}>Logout</MenuItem>
                         </Menu>

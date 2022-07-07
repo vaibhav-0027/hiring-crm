@@ -1,9 +1,10 @@
 import React from 'react'
-import { Switch, Route } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
 import Candidates from '../screens/Candidates';
 import Companies from '../screens/Companies';
 import Contacts from '../screens/Contacts';
 import HomePage from '../screens/HomePage';
+import ProfilePage from '../screens/ProfilePage';
 import Vacancies from '../screens/Vacancies';
 import PrivateRoute from './PrivateRoute';
 
@@ -15,6 +16,7 @@ const MainRouteSwitch = () => {
             <PrivateRoute exact path="/contacts" component={Contacts} />
             <PrivateRoute exact path="/candidates" component={Candidates} />
             <PrivateRoute exact path="/vacancies" component={Vacancies} />
+            <PrivateRoute exact path="/profile" component={ProfilePage} />
 
             {/* <Redirect from="/" to="/home" /> */}
         </Switch>
