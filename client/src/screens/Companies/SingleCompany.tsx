@@ -1,4 +1,4 @@
-import { Card, CardContent, Link } from '@mui/material';
+import { Card, CardContent } from '@mui/material';
 import { motion } from 'framer-motion';
 import React from 'react'
 import { CompanyType } from '../../helpers/types'
@@ -7,6 +7,8 @@ import { useHistory } from 'react-router-dom';
 
 interface SingleCompanyProps {
     info: CompanyType;
+    setSelectedCompany: (selectedCompany: CompanyType) => void;
+    setIsEditCompanyModalOpen: (value: boolean) => void;
 }
 
 const SingleCompany = (props: SingleCompanyProps) => {
@@ -15,7 +17,8 @@ const SingleCompany = (props: SingleCompanyProps) => {
     const history = useHistory();
 
     const _cardClickHandler = () => {
-
+        props.setSelectedCompany(info);
+        props.setIsEditCompanyModalOpen(true);
     }
 
     const _calcApproxSize = (): string => {

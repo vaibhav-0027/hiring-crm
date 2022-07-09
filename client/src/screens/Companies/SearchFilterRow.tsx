@@ -1,23 +1,29 @@
-import { Button, Modal, TextField } from '@mui/material'
+import { Button, TextField } from '@mui/material'
 import React, { useEffect, useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
 import { CompanyType } from '../../helpers/types';
 import { motion } from 'framer-motion';
-import CompanyModal from './CompanyModal';
 
 interface SearchFilterRowProps {
     searchField: string;
     setSearchField: (value: string) => void;
     companyList: CompanyType[];
     setCompanyList: any;
+    setIsModalOpen: (value: boolean) => void;
+    setSelectedCompany: (value: null) => void;
 }
 
 const SearchFilterRow = (props: SearchFilterRowProps) => {
 
-    const { searchField, setSearchField, companyList, setCompanyList } = props;
+    const {
+        searchField,
+        setSearchField,
+        companyList,
+        setCompanyList,
+        setIsModalOpen,
+        setSelectedCompany } = props;
     const [isHovering, setIsHovering] = useState<boolean>(false);
-    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
     const ltrim = (str: string) => {
         if (!str) return str;
@@ -37,23 +43,23 @@ const SearchFilterRow = (props: SearchFilterRowProps) => {
                 if (_company.name.toLowerCase().includes(currentSearchField)) {
                     return _company;
                 }
+                return null;
             });
         });
+        // eslint-disable-next-line
     }, [searchField]);
 
     const _searchFieldChangeHandler = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         setSearchField(event.target.value.trim());
     }
 
-    const _handleOpenModal = () => setIsModalOpen(true);
-    const _handleCloseModal = () => setIsModalOpen(false);
+    const _handleAddCompanyClick = () => {
+        setIsModalOpen(true);
+        setSelectedCompany(null);
+    }
 
     return (
         <div className='flex flex-row justify-between'>
-            <CompanyModal
-                open={isModalOpen}
-                handleClose={_handleCloseModal}
-            />
             <div className='w-10/12'>
                 <TextField
                     label='Search company'
@@ -70,7 +76,7 @@ const SearchFilterRow = (props: SearchFilterRowProps) => {
             </div>
             <div className='w-2/12'>
                 <Button
-                    onClick={_handleOpenModal}
+                    onClick={_handleAddCompanyClick}
                     onMouseOver={() => setIsHovering(!isHovering)}
                     variant='outlined'
                     className='flex flex-row items-center justify-center'>
