@@ -6,3 +6,14 @@ export interface CompanyType {
     companySize: number;
     openVacancies: number;
 }
+
+export interface ContactType {
+    id: string;
+    name: string;
+    email: string;
+    description: string;
+    mobileNumber: number;
+    linkedinUrl: string;
+    companyId: string;
+    fileId: string;
+}
