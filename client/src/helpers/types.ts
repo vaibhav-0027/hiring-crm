@@ -38,3 +38,17 @@ export interface ClientType {
 
     roleListId: string;
 }
+
+export interface VacancyType {
+    id: string;
+    name: string;
+    packageMin: number;
+    packageMax: number;
+    description: string;
+    countOpen: number;
+    countClosed: number;
+    isOpen: boolean;
+    stages: string;
+
+    companyId: string;
+}
