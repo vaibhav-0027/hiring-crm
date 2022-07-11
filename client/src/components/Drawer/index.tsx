@@ -110,7 +110,7 @@ const Drawer = () => {
                 {_renderListItem("Home", "/home", HomeIcon)}
                 {_renderListItem("Companies", "/companies", BusinessIcon)}
                 {_renderListItem("Contacts", "/contacts", ContactPhoneIcon)}
-                {_renderListItem("Candidates", "/candidates", AssignmentIndIcon)}
+                {_renderListItem("Clients", "/clients", AssignmentIndIcon)}
                 {_renderListItem("Vacancies", "/vacancies", WorkHistoryIcon)}
             </List>
         </Drawer>

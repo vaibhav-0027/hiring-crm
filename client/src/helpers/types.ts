@@ -14,6 +14,27 @@ export interface ContactType {
     description: string;
     mobileNumber: number;
     linkedinUrl: string;
+
     companyId: string;
     fileId: string;
+}
+
+export interface RoleListType {
+    id: string;
+    name: string;
+    description: string;
+}
+export interface ClientType {
+    id: string;
+    name: string;
+    email: string;
+    mobileNumber: number;
+    currentPackage: number;
+    expectedPackage: number;
+    description: string;
+    linkedinUrl: string;
+    websiteUrl: string;
+    noticePeriod: number;
+
+    roleListId: string;
 }
