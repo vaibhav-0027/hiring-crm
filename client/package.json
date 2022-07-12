@@ -17,6 +17,7 @@
     "@types/react-dom": "^18.0.0",
     "@types/react-router-dom": "^5.3.3",
     "@types/validator": "^13.7.4",
+    "axios": "^0.27.2",
     "dotenv": "^16.0.1",
     "firebase": "^9.8.4",
     "framer-motion": "^6.4.2",

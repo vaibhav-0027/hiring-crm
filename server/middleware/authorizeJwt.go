@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/vaibhav-0027/hiring-crm/handler"
+	"github.com/vaibhav-0027/hiring-crm/utils"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 )
 
@@ -22,20 +22,25 @@ func AuthorizeJWT() gin.HandlerFunc {
 
 		tokenString := authHeader[len(BearerSchema):]
 
-		if token, err := handler.ValidateToken(tokenString); err != nil {
+		_, err := handler.ValidateToken(tokenString)
+
+		if err != nil {
+			utils.Logger.Debug("Failed to validate token")
 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 				"error": "Not Valid Token",
 			})
-		} else {
-			if claims, ok := token.Claims.(jwt.MapClaims); !ok {
-				ctx.AbortWithStatus(http.StatusUnauthorized)
-			} else {
-				if token.Valid {
-					ctx.Set("userID", claims["userID"])
-				} else {
-					ctx.AbortWithStatus(http.StatusUnauthorized)
-				}
-			}
 		}
+		// else {
+		// if _, ok := token.Claims.(jwt.MapClaims); !ok {
+		// 	ctx.AbortWithStatus(http.StatusUnauthorized)
+		// }
+		// else {
+		// 	if token.Valid {
+		// 		ctx.Set("userID", claims["userID"])
+		// 	} else {
+		// 		ctx.AbortWithStatus(http.StatusUnauthorized)
+		// 	}
+		// }
+		// }
 	}
 }

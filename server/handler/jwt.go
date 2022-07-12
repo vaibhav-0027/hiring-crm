@@ -22,11 +22,15 @@ func GenerateToken(userid uint) string {
 }
 
 func ValidateToken(token string) (*jwt.Token, error) {
-	return jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
-		}
+	claims := jwt.MapClaims{}
+	newToken, _ := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
 
-		return []byte(os.Getenv("JWT_SECRET")), nil
+		return []byte("secret"), nil
 	})
+
+	if claims["aud"] == "hiring-crm" && claims["firebase"] != nil {
+		return newToken, nil
+	}
+
+	return nil, fmt.Errorf("Invalid token")
 }
