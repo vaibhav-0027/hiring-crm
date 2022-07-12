@@ -1,4 +1,4 @@
-import { VacancyType } from "./types"
+import { CandidateType, VacancyType } from "./types"
 
 export const dummyCompanyIdNameMap: object = {
     'company-id-1': 'Google',
@@ -18,7 +18,7 @@ export const dummyVacancyList: VacancyType[] = [
         countOpen: 3,
         countClosed: 0,
         isOpen: true,
-        stages: '',
+        stages: 'Messaged, Called, Not interested, Interview scheduled, Round 1, Round 2, Round 3, Rejected, Hired',
         companyId: 'company-id-1',
     },
     {
@@ -30,7 +30,7 @@ export const dummyVacancyList: VacancyType[] = [
         countOpen: 3,
         countClosed: 0,
         isOpen: true,
-        stages: '',
+        stages: 'Messaged, Called, Not interested, Interview scheduled, Round 1, Round 2, Round 3, Rejected, Hired',
         companyId: 'company-id-2',
     },
     {
@@ -42,7 +42,7 @@ export const dummyVacancyList: VacancyType[] = [
         countOpen: 3,
         countClosed: 0,
         isOpen: true,
-        stages: '',
+        stages: 'Messaged, Called, Not interested, Interview scheduled, Round 1, Round 2, Round 3, Rejected, Hired',
         companyId: 'company-id-1',
     },
     {
@@ -54,7 +54,38 @@ export const dummyVacancyList: VacancyType[] = [
         countOpen: 3,
         countClosed: 0,
         isOpen: true,
-        stages: '',
+        stages: 'Messaged, Called, Not interested, Interview scheduled, Round 1, Round 2, Round 3, Rejected, Hired',
         companyId: 'company-id-3',
+    },
+]
+
+export const dummyCandidateList: CandidateType[] = [
+    {
+        id: 'candidate-id-1',
+        vacancyId: 'vacancy-id-1',
+        clientId: 'user-id-1',
+        index: 0,
+        description: "some lorem ipsum thing",
+    },
+    {
+        id: 'candidate-id-2',
+        vacancyId: 'vacancy-id-1',
+        clientId: 'user-id-1',
+        index: 0,
+        description: "some lorem ipsum thing sometyhing longer lorem upsum shit",
+    },
+    {
+        id: 'candidate-id-3',
+        vacancyId: 'vacancy-id-1',
+        clientId: 'user-id-1',
+        index: 1,
+        description: "some lorem ipsum thing",
+    },
+    {
+        id: 'candidate-id-4',
+        vacancyId: 'vacancy-id-1',
+        clientId: 'user-id-1',
+        index: 2,
+        description: "some lorem ipsum thing",
     },
 ]

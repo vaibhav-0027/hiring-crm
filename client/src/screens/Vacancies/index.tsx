@@ -47,8 +47,9 @@ const Vacancies = () => {
 	}
 
 	return (
-		<div className='m-5 w-full h-full'>
-			<Tabs value={tabIndex} onChange={_tabChangeHandler}>
+		// <div className={tabIndex === 0 ? 'm-5 w-full h-full vacancies-div' : 'm-5 w-full h-full vacancies-div overflow-x-scroll overflow-y-hidden'}>
+		<div className='m-5 w-full h-full vacancies-div'>
+			<Tabs className='' value={tabIndex} onChange={_tabChangeHandler}>
 				<Tab
 					label='Vacancies'
 					value={0}

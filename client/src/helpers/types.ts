@@ -52,3 +52,11 @@ export interface VacancyType {
 
     companyId: string;
 }
+
+export interface CandidateType {
+    id: string;
+    vacancyId: string;
+    clientId: string;
+    index: number;
+    description: string;
+}
