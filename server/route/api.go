@@ -1,15 +1,12 @@
 package route
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/vaibhav-0027/hiring-crm/handler"
 	"github.com/vaibhav-0027/hiring-crm/middleware"
-	"github.com/vaibhav-0027/hiring-crm/utils"
-	"go.uber.org/zap"
 )
 
 func RunAPI(address string) error {
@@ -20,16 +17,14 @@ func RunAPI(address string) error {
 	vacancyHandler := handler.NewVacancyHandler()
 
 	r := gin.New()
+	// r.Use(cors.Default())
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"*", "https://localhost:3000", "http://localhost:3000"},
-		AllowMethods:     []string{"POST", "GET", "PUT", "DELETE", "OPTIONS"},
+		AllowMethods:     []string{"POST", "GET", "PUT", "DELETE", "OPTIONS", "PATCH"},
 		AllowHeaders:     []string{"X-Requested-With", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 		AllowOriginFunc: func(origin string) bool {
-			utils.Logger.Debug("printing origin",
-				zap.String("origing", origin))
-			fmt.Print(origin)
 			return origin == "localhost:3000"
 		},
 	}))

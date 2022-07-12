@@ -17,10 +17,11 @@ export const clearUserInfo = async () => {
 }
 
 export const getUserAccessToken = async () => {
-    const userInfo = await getUserInfo();
-    if (userInfo === {}) {
+    let userInfo = await localStorage.getItem(userInfoKey) || "";
+    if (userInfo === "") {
         return "";
     }
 
-    return userInfo.user.stsTokenManager.accessToken;
+    let userInfoObj = JSON.parse(userInfo);
+    return userInfoObj?.stsTokenManager?.accessToken;
 }

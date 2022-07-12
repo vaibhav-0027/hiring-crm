@@ -36,7 +36,7 @@ func (db *companyRepository) GetCompanyWithID(id uuid.UUID) (company model.Compa
 }
 
 func (db *companyRepository) GetAllCompanyList() (companyList []model.Company, err error) {
-	return companyList, db.connection.Find(&companyList).Error
+	return companyList, db.connection.Order("updated_at desc").Find(&companyList).Error
 }
 
 func (db *companyRepository) UpdateCompany(company model.Company) (model.Company, error) {

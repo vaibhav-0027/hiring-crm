@@ -35,10 +35,10 @@ dash_api.interceptors.response.use(
 		return response;
 	},
 	async (error) => {
-		if (error.response.status === 401 && await getUserAccessToken()) {
+		if (error.response?.status === 401 && await getUserAccessToken()) {
 			clearUserInfo();
 		}
-		return Promise.reject(error);
+		return error;
 	}
 );
 

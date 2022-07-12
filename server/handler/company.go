@@ -38,11 +38,7 @@ func (h *companyHandler) CreateCompanyWithLinkedin(ctx *gin.Context) {
 
 func (h *companyHandler) CreateCompanyWithDetails(ctx *gin.Context) {
 	var company model.Company
-	// utils.Logger.Debug(
-	// 	"incoming context",
-	// 	zap.String("ctx", fmt.Sprint(ctx.Keys)),
-	// )
-	
+
 	if err := ctx.ShouldBindJSON(&company); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
@@ -53,11 +49,6 @@ func (h *companyHandler) CreateCompanyWithDetails(ctx *gin.Context) {
 		)
 		return
 	}
-
-	// utils.Logger.Debug(
-	// 	"after getting info from ctx",
-	// 	zap.String("company", fmt.Sprint(company)),
-	// )
 
 	company, err := h.repo.CreateCompanyWithDetails(company)
 	if err != nil {

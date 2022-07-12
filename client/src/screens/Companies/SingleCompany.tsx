@@ -39,7 +39,7 @@ const SingleCompany = (props: SingleCompanyProps) => {
             return "" + cnt / 1000 + "k"
         }
 
-        return "" + cnt / 100000 + "lakh"
+        return "" + Math.trunc(cnt / 100000) + "lakh"
     }
 
     const _renderCardTitle = () => {

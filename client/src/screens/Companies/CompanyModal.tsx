@@ -2,11 +2,16 @@ import { Box, Button, Modal, TextareaAutosize, TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import SaveIcon from '@mui/icons-material/Save';
 import { CompanyType } from '../../helpers/types';
+import { toast, ToastContainer } from 'react-toastify';
+import { checkEmptyInput } from '../../helpers/emptyInputChecker';
+import { addCompanyInfo, updateCompanyInfo } from './apis';
+import { DUMMY_UUID } from '../../helpers/constants';
 
 interface NewCompanyModalProps {
     open: boolean;
     handleClose: () => void;
     currentSelected: CompanyType | null;
+    setUpdatedCompanyInfo: (value: CompanyType) => void;
 }
 
 const style = {
@@ -25,8 +30,14 @@ const style = {
 
 const CompanyModal = (props: NewCompanyModalProps) => {
 
-    const { open, handleClose, currentSelected } = props;
+    const {
+        open,
+        handleClose,
+        currentSelected,
+        setUpdatedCompanyInfo } = props;
 
+    const [id, setId] = useState<string>('');
+    const [openVacancies, setOpenVacancies] = useState<number>(0);
     const [companyName, setCompanyName] = useState<string>('');
     const [companyUrl, setCompanyUrl] = useState<string>('');
     const [companySize, setCompanySize] = useState<number>(0);
@@ -34,6 +45,8 @@ const CompanyModal = (props: NewCompanyModalProps) => {
 
     useEffect(() => {
         if (!currentSelected) {
+            setId('');
+            setOpenVacancies(0);
             setCompanyName('');
             setCompanyUrl('');
             setCompanySize(0);
@@ -41,6 +54,8 @@ const CompanyModal = (props: NewCompanyModalProps) => {
             return;
         }
 
+        setId(currentSelected.id);
+        setOpenVacancies(currentSelected.openVacancies);
         setCompanyName(currentSelected.name);
         setCompanyUrl(currentSelected.url);
         setCompanySize(currentSelected.companySize);
@@ -54,8 +69,60 @@ const CompanyModal = (props: NewCompanyModalProps) => {
         }
     }
 
-    const _saveButtonClickHandler = () => {
-        // TODO: connect with APIs.
+    const _saveButtonClickHandler = async () => {
+        if (checkEmptyInput(companyName)) {
+            toast.warning("Company name cannot be empty!");
+            return;
+        }
+
+        if (checkEmptyInput(companyUrl)) {
+            toast.warning("Company url cannot be empty!");
+            return;
+        }
+
+        const info = {
+            name: companyName.trim(),
+            url: companyUrl.trim(),
+            description: description.trim(),
+            companySize: companySize,
+            openVacancies: 0,
+            id: DUMMY_UUID,
+        };
+
+        if (!currentSelected) {
+            let response = await addCompanyInfo(info);
+            if (!response) {
+                toast.error(`
+                Something went wrong! 
+                Possible reasons: 
+                1. company url already used.
+                2. server issue`)
+                return;
+            }
+
+            setUpdatedCompanyInfo(response);
+            handleClose();
+            return;
+        }
+
+        const updatedInfo = {
+            ...info,
+            openVacancies: openVacancies,
+            id: id,
+        };
+
+        let response = await updateCompanyInfo(id, updatedInfo);
+        if (!response) {
+            toast.error(`
+            Something went wrong! 
+            Possible reasons: 
+            1. company url already used.
+            2. server issue`)
+            return;
+        }
+
+        setUpdatedCompanyInfo(response);
+        handleClose();
     }
     // TODO: Style textarea similar to normal input fields.
 
@@ -65,6 +132,8 @@ const CompanyModal = (props: NewCompanyModalProps) => {
             onClose={handleClose}
         >
             <Box sx={style}>
+                <ToastContainer />
+
                 <div className='text-2xl text-primary ml-2 font-bold'>
                     {currentSelected ? 'Edit' : 'Add'}
                     <span className='ml-2'>company info</span>
@@ -74,31 +143,40 @@ const CompanyModal = (props: NewCompanyModalProps) => {
                     <div className='flex flex-row'>
                         <TextField
                             placeholder='Company name...'
+                            label='Company name'
                             value={companyName}
                             onChange={e => setCompanyName(e.target.value)}
                             className='w-1/2'
+                            required
                         />
                     </div>
+
                     <div className='flex flex-row w-full mt-3'>
                         <div className='w-3/4'>
                             <TextField
                                 placeholder='Company url...'
+                                label='Company url'
                                 value={companyUrl}
                                 onChange={e => setCompanyUrl(e.target.value)}
                                 className='w-11/12'
+                                required
                             />
                         </div>
                         <div className='w-1/4'>
                             <TextField
                                 placeholder='Company size...'
+                                label='Company size'
                                 value={companySize}
                                 onChange={_companySizeChangeHandler}
                                 className='w-11/12'
                                 type='number'
+                                required
                             />
                         </div>
                     </div>
+
                     <div className='mt-3'>
+                        <span>Company description</span>
                         <TextareaAutosize
                             placeholder='Company description...'
                             value={description}

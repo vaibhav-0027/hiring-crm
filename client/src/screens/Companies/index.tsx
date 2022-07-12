@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { CompanyType } from '../../helpers/types';
-import { dummyCompanyList } from '../../helpers/dummyCompanyList';
 import SearchFilterRow from './SearchFilterRow';
 import SingleCompany from './SingleCompany';
 import CompanyModal from './CompanyModal';
+import { fetchCompanyList } from './apis';
 
 const Companies = () => {
 
@@ -12,11 +12,51 @@ const Companies = () => {
     const [fullCompanyList, setFullCompanyList] = useState<CompanyType[]>([]);
     const [selectedCompany, setSelectedCompany] = useState<CompanyType | null>(null);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [updatedCompanyInfo, setUpdatedCompanyInfo] = useState<CompanyType | null>(null);
 
     useEffect(() => {
-        setCurrentCompanyList(dummyCompanyList);
-        setFullCompanyList(dummyCompanyList);
+        // Fetching company list 
+        (async () => {
+            const data = await fetchCompanyList();
+            setCurrentCompanyList(data);
+            setFullCompanyList(data);
+        })()
     }, []);
+
+    useEffect(() => {
+        if (!updatedCompanyInfo) {
+            return;
+        }
+
+        let found = false;
+        let tempFullList = fullCompanyList;
+        let tempCurrentList = currentCompanyList;
+
+        tempFullList = tempFullList.map(_current => {
+            if (_current.id === updatedCompanyInfo.id) {
+                found = true;
+                return updatedCompanyInfo;
+            }
+
+            return _current;
+        });
+
+        tempCurrentList = tempCurrentList.map(_current => {
+            if (_current.id === updatedCompanyInfo.id) {
+                return updatedCompanyInfo;
+            }
+
+            return _current;
+        });
+
+        if (!found) {
+            tempFullList.push(updatedCompanyInfo);
+            tempCurrentList.push(updatedCompanyInfo);
+        }
+
+        setFullCompanyList(tempFullList);
+        setCurrentCompanyList(tempCurrentList);
+    }, [updatedCompanyInfo]);
 
     const _handleCloseModal = () => setIsModalOpen(false);
 
@@ -26,6 +66,7 @@ const Companies = () => {
                 open={isModalOpen}
                 handleClose={_handleCloseModal}
                 currentSelected={selectedCompany}
+                setUpdatedCompanyInfo={setUpdatedCompanyInfo}
             />
 
             <SearchFilterRow
