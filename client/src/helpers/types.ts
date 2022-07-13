@@ -42,22 +42,24 @@ export interface ClientType {
 
 export interface VacancyType {
     id: string;
-    name: string;
+    roleName: string;
     packageMin: number;
     packageMax: number;
-    description: string;
+    jobDescription: string;
     countOpen: number;
     countClosed: number;
     isOpen: boolean;
     stages: string;
 
     companyId: string;
+    fileId: string;
 }
 
 export interface CandidateType {
     id: string;
+    status: number;
+    description: string;
+
     vacancyId: string;
     clientId: string;
-    index: number;
-    description: string;
 }

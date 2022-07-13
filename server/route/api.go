@@ -88,6 +88,7 @@ func RunAPI(address string) error {
 	vacancyRoutes := apiRoutes.Group("/vacancy", middleware.AuthorizeJWT())
 	{
 		vacancyRoutes.POST("/new", vacancyHandler.CreateVacancy)
+		vacancyRoutes.GET("/all", vacancyHandler.GetAllVacancyList)
 		vacancyRoutes.GET("/:vacancyID", vacancyHandler.GetVacancyWithID)
 		vacancyRoutes.GET("/company/:companyID", vacancyHandler.GetVacancyListForCompany)
 		vacancyRoutes.PUT("/:vacancyID", vacancyHandler.UpdateVacancy)

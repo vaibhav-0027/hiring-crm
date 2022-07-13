@@ -10,7 +10,7 @@ type Vacancy struct {
 	JobDescription string    `json:"jobDescription"`
 	CountOpen      int32     `json:"countOpen"`
 	CountClosed    int32     `json:"countClosed"`
-	IsOpen         bool      `json:"isOpen"`
+	IsOpen         *bool     `json:"isOpen" gorm:"default:true"`
 	Stages         string    `json:"stages"`
 	CompanyID      uuid.UUID `json:"companyId" binding:"required"`
 	FileID         uuid.UUID `json:"fileId"`

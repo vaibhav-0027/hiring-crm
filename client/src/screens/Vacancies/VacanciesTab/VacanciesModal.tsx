@@ -4,12 +4,17 @@ import React, { useEffect, useState } from 'react'
 import { VacancyType } from '../../../helpers/types';
 import SaveIcon from '@mui/icons-material/Save';
 import InfoIcon from '@mui/icons-material/Info';
+import { addVacancyInfo, updateVacancyInfo } from './apis';
+import { DUMMY_UUID } from '../../../helpers/constants';
+import { toast } from 'react-toastify';
+import { checkEmptyInput } from '../../../helpers/emptyInputChecker';
 
 interface VacanciesModalProps {
     open: boolean;
     handleClose: () => void;
     currentSelected: VacancyType | null;
     companyIdNameMap: any;
+    setUpdatedVacancyInfo: (value: VacancyType) => void;
 }
 
 const style = {
@@ -32,7 +37,8 @@ const VacanciesModal = (props: VacanciesModalProps) => {
         open,
         handleClose,
         currentSelected,
-        companyIdNameMap } = props;
+        companyIdNameMap,
+        setUpdatedVacancyInfo } = props;
 
     const [name, setName] = useState<string>('');
     const [packageMin, setPackageMin] = useState<number>(0);
@@ -58,10 +64,10 @@ const VacanciesModal = (props: VacanciesModalProps) => {
             return;
         }
 
-        setName(currentSelected.name);
+        setName(currentSelected.roleName);
         setPackageMin(currentSelected.packageMin);
         setPackageMax(currentSelected.packageMax);
-        setDescription(currentSelected.description);
+        setDescription(currentSelected.jobDescription);
         setCountOpen(currentSelected.countOpen);
         setCountClosed(currentSelected.countClosed);
         setIsOpen(currentSelected.isOpen);
@@ -73,13 +79,97 @@ const VacanciesModal = (props: VacanciesModalProps) => {
         setCompanyId(event.target.value as string);
     }
 
-    const _handleCloseVacancy = () => {
-        // TODO: use currentselected.id
+    const _handleCloseVacancy = async () => {
+
+        if (!currentSelected) {
+            return;
+        }
+
+        const info = {
+            id: currentSelected.id,
+            roleName: name,
+            packageMin,
+            packageMax,
+            jobDescription: description,
+            countOpen,
+            countClosed,
+            isOpen: false,
+            stages,
+            companyId,
+            fileId: DUMMY_UUID,
+        }
+
+        const response = await updateVacancyInfo(currentSelected.id, info);
+        if (!response) {
+            toast.warning('Internal server error!')
+            return;
+        }
+
+        setUpdatedVacancyInfo(response);
+        handleClose();
     }
 
-    const _saveButtonClickHandler = () => {
-        // TODO: connect with APIs.
-        // TODO: validate all the input values
+    const _saveButtonClickHandler = async () => {
+        if (checkEmptyInput(name)) {
+            toast.warning("Role name cannot be empty");
+            return;
+        }
+
+        if (companyId === "") {
+            toast.warning("Please select a company first.")
+            return;
+        }
+
+        if (checkEmptyInput("" + packageMin)) {
+            toast.warning("Min package cannot be empty");
+            return;
+        }
+
+        const info = {
+            id: DUMMY_UUID,
+            roleName: name,
+            packageMin,
+            packageMax,
+            jobDescription: description,
+            countOpen,
+            countClosed,
+            isOpen,
+            stages,
+            companyId,
+            fileId: DUMMY_UUID,
+        }
+
+        if (!currentSelected) {
+            let response = await addVacancyInfo(info);
+            if (!response) {
+                toast.error(`
+                Something went wrong! 
+                Possible reasons: 
+                1. server issue`)
+                return;
+            }
+
+            setUpdatedVacancyInfo(response);
+            handleClose();
+            return;
+        }
+
+        const updatedInfo = {
+            ...info,
+            id: currentSelected.id,
+        }
+
+        let response = await updateVacancyInfo(currentSelected.id, updatedInfo);
+        if (!response) {
+            toast.error(`
+            Something went wrong! 
+            Possible reasons: 
+            1. server issue`)
+            return;
+        }
+
+        setUpdatedVacancyInfo(response);
+        handleClose();
     }
     // TODO: Style textarea similar to normal input fields.
 

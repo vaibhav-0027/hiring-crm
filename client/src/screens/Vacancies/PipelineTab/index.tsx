@@ -37,11 +37,11 @@ const PipelineTab = (props: PipelineTabProps) => {
                 return;
             }
 
-            if (!tempData[_current.index]) {
-                tempData[_current.index] = [];
+            if (!tempData[_current.status]) {
+                tempData[_current.status] = [];
             }
 
-            tempData[_current.index].push(_current);
+            tempData[_current.status].push(_current);
         });
 
         setData(tempData);

@@ -39,11 +39,11 @@ const SearchFilterRow = (props: SearchFilterRowProps) => {
 
         setVacancyList((prev: VacancyType[]) => {
             return prev.filter((_vacancy: VacancyType) => {
-                if (_vacancy.name.toLowerCase().includes(currentSearchField)) {
+                if (_vacancy.roleName.toLowerCase().includes(currentSearchField)) {
                     return _vacancy;
                 }
 
-                if (_vacancy.description.toLowerCase().includes(currentSearchField)) {
+                if (_vacancy.jobDescription.toLowerCase().includes(currentSearchField)) {
                     return _vacancy;
                 }
 

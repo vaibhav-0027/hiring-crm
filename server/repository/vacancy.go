@@ -4,13 +4,17 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
+	"go.uber.org/zap"
+
 	// "github.com/jinzhu/gorm"
 	"github.com/vaibhav-0027/hiring-crm/model"
+	"github.com/vaibhav-0027/hiring-crm/utils"
 	"gorm.io/gorm"
 )
 
 type VacancyRepository interface {
 	CreateVacancy(model.Vacancy) (model.Vacancy, error)
+	GetAllVacancyList() ([]model.Vacancy, error)
 	GetVacancyWithID(uuid.UUID) (model.Vacancy, error)
 	GetVacancyListForCompany(uuid.UUID) ([]model.Vacancy, error)
 	UpdateVacancy(model.Vacancy) (model.Vacancy, error)
@@ -39,6 +43,10 @@ func (db *vacancyRepository) CreateVacancy(vacancy model.Vacancy) (model.Vacancy
 	return vacancy, db.connection.Create(&vacancy).Error
 }
 
+func (db *vacancyRepository) GetAllVacancyList() (vacancyList []model.Vacancy, err error) {
+	return vacancyList, db.connection.Order("updated_at desc").Find(&vacancyList, "is_open=?", true).Error
+}
+
 func (db *vacancyRepository) GetVacancyWithID(id uuid.UUID) (vacancy model.Vacancy, err error) {
 	return vacancy, db.connection.First(&vacancy, id).Error
 }
@@ -58,15 +66,37 @@ func (db *vacancyRepository) UpdateVacancy(vacancy model.Vacancy) (model.Vacancy
 		CountClosed:    vacancy.CountClosed,
 		IsOpen:         vacancy.IsOpen,
 		Stages:         vacancy.Stages,
+		CompanyID:      vacancy.CompanyID,
 		FileID:         vacancy.FileID,
 	}
+
+	utils.Logger.Debug(
+		"Logging vacancy incoming data",
+		zap.Any("vacancy", updatedVacancy),
+	)
 
 	err := db.connection.First(&vacancy, vacancy.ID).Error
 	if err != nil {
 		return vacancy, err
 	}
 
-	return vacancy, db.connection.Model(&vacancy).Updates(updatedVacancy).Error
+	return vacancy,
+		db.connection.
+			Model(&vacancy).
+			Updates(updatedVacancy).
+			Error
+	// return vacancy, db.connection.Model(&vacancy).Updates(map[string]interface{}{
+	// 	"role_name":       updatedVacancy.RoleName,
+	// 	"package_min":     updatedVacancy.PackageMin,
+	// 	"package_max":     updatedVacancy.PackageMax,
+	// 	"job_description": updatedVacancy.JobDescription,
+	// 	"count_open":      updatedVacancy.CountOpen,
+	// 	"count_closed":    updatedVacancy.CountClosed,
+	// 	"is_open":         updatedVacancy.IsOpen,
+	// 	"stages":          updatedVacancy.Stages,
+	// 	"company_id":      updatedVacancy.CompanyID,
+	// 	"file_id":         updatedVacancy.FileID,
+	// }).Error
 }
 
 func (db *vacancyRepository) DeleteVacancy(vacancy model.Vacancy) (model.Vacancy, error) {

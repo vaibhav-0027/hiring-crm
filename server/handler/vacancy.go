@@ -14,6 +14,7 @@ import (
 
 type VacancyHandler interface {
 	CreateVacancy(ctx *gin.Context)
+	GetAllVacancyList(ctx *gin.Context)
 	GetVacancyWithID(ctx *gin.Context)
 	GetVacancyListForCompany(ctx *gin.Context)
 	UpdateVacancy(ctx *gin.Context)
@@ -65,6 +66,27 @@ func (h *vacancyHandler) CreateVacancy(ctx *gin.Context) {
 }
 
 // -------------- Read methods ------------------
+func (h *vacancyHandler) GetAllVacancyList(ctx *gin.Context) {
+	vacancyList, err := h.repo.GetAllVacancyList()
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		utils.Logger.Debug(
+			"Internal server error while fetching vacancies.",
+			zap.String("request", fmt.Sprint(ctx.Keys)),
+			zap.Error(err),
+		)
+		return
+	}
+
+	utils.Logger.Debug(
+		"Get Vacancy List fetched successfully.",
+		zap.String("clientList", fmt.Sprint(vacancyList)),
+	)
+	ctx.JSON(http.StatusOK, vacancyList)
+}
+
 func (h *vacancyHandler) GetVacancyWithID(ctx *gin.Context) {
 	vacancyIDStr := ctx.Param("vacancyID")
 	vacancyID, err := uuid.Parse(vacancyIDStr)

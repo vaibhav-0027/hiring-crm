@@ -134,7 +134,7 @@ const VacanciesTable = (props: VacanciesTableProps) => {
                                     <span
                                         onClick={() => _selectRowHandler(_vacancy)}
                                         className='cursor-pointer text-primary'>
-                                        {_vacancy.name}
+                                        {_vacancy.roleName}
                                     </span>
                                 </div>
                             </td>
@@ -148,7 +148,7 @@ const VacanciesTable = (props: VacanciesTableProps) => {
                                 {_vacancy.countOpen}
                             </td>
                             <td className='w-4/12' align='justify' >
-                                {_vacancy.description}
+                                {_vacancy.jobDescription}
                             </td>
                             <td className='w-2/12' align='justify' >
                                 {companyIdNameMap[_vacancy.companyId]}
