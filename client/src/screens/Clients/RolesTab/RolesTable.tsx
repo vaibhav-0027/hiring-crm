@@ -1,5 +1,5 @@
 import React from 'react'
-import { RoleListType } from '../../../helpers/types'
+import { RoleType } from '../../../helpers/types'
 import { styled } from '@mui/system';
 import TablePaginationUnstyled, {
     tablePaginationUnstyledClasses as classes,
@@ -7,11 +7,11 @@ import TablePaginationUnstyled, {
 import EditIcon from '@mui/icons-material/Edit';
 
 interface RolesTableProps {
-    rolesList: RoleListType[];
+    rolesList: RoleType[];
     setIsModalOpen: (value: boolean) => void;
-    setCurrentSelected: (value: RoleListType) => void;
+    setCurrentSelected: (value: RoleType) => void;
     setTabIndex: (value: number) => void;
-    setCurrentRole: (value: RoleListType) => void;
+    setCurrentRole: (value: RoleType) => void;
 }
 
 const RolesTable = (props: RolesTableProps) => {
@@ -22,6 +22,7 @@ const RolesTable = (props: RolesTableProps) => {
         setCurrentSelected,
         setTabIndex,
         setCurrentRole } = props;
+
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -98,12 +99,12 @@ const RolesTable = (props: RolesTableProps) => {
         }
         `;
 
-    const _selectRowHandler = (info: RoleListType) => {
+    const _selectRowHandler = (info: RoleType) => {
         setTabIndex(1);
         setCurrentRole(info);
     }
 
-    const _editCurrentRow = (info: RoleListType) => {
+    const _editCurrentRow = (info: RoleType) => {
         setCurrentSelected(info);
         setIsModalOpen(true);
     }
@@ -119,31 +120,35 @@ const RolesTable = (props: RolesTableProps) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {(rowsPerPage > 0
-                        ? rolesList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                        : rolesList
-                    ).map((_role) => (
-                        <tr key={_role.id}>
-                            <td className='w-2/12' align='justify'>
-                                <div className='w-full'>
-                                    <span
-                                        onClick={() => _selectRowHandler(_role)}
-                                        className='cursor-pointer text-primary'>
-                                        {_role.name}
-                                    </span>
-                                </div>
-                            </td>
-                            <td className='w-10/12' align='justify' >
-                                {_role.description}
-                            </td>
-                            <td className='w-2/12 text-primary' align='justify' >
-                                <EditIcon
-                                    className='cursor-pointer'
-                                    onClick={() => _editCurrentRow(_role)}
-                                />
-                            </td>
-                        </tr>
-                    ))}
+                    {
+                        (rowsPerPage > 0
+                            ? rolesList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                            : rolesList
+                        ).map((_role) => {
+                            return (
+                                <tr key={_role.id}>
+                                    <td className='w-2/12' align='justify'>
+                                        <div className='w-full'>
+                                            <span
+                                                onClick={() => _selectRowHandler(_role)}
+                                                className='cursor-pointer text-primary'>
+                                                {_role.name}
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td className='w-10/12' align='justify' >
+                                        {_role.description}
+                                    </td>
+                                    <td className='w-2/12 text-primary' align='justify' >
+                                        <EditIcon
+                                            className='cursor-pointer'
+                                            onClick={() => _editCurrentRow(_role)}
+                                        />
+                                    </td>
+                                </tr>
+                            )
+                        })
+                    }
                     {emptyRows > 0 && (
                         <tr style={{ height: 41 * emptyRows }}>
                             <td colSpan={3} />

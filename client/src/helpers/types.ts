@@ -19,7 +19,7 @@ export interface ContactType {
     fileId: string;
 }
 
-export interface RoleListType {
+export interface RoleType {
     id: string;
     name: string;
     description: string;
@@ -36,7 +36,8 @@ export interface ClientType {
     websiteUrl: string;
     noticePeriod: number;
 
-    roleListId: string;
+    roleId: string;
+    fileId: string;
 }
 
 export interface VacancyType {

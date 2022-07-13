@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { dummyClientsList, dummyRoleIdNameMap } from '../../../helpers/dummyClients';
-import { ClientType, RoleListType } from '../../../helpers/types';
+import { ClientType, RoleType } from '../../../helpers/types';
 import ClientsModal from './ClientsModal';
 import ClientsTable from './ClientsTable';
 import SearchFilterRow from './SearchFilterRow';
 
 interface ClientsTabProps {
-    currentRole: RoleListType | null;
+    currentRole: RoleType | null;
 }
 
 const ClientsTab = (props: ClientsTabProps) => {
@@ -26,7 +26,7 @@ const ClientsTab = (props: ClientsTabProps) => {
         // TODO: use currentRole to fetch clientsList from backend.
 
         setFullClientsList(dummyClientsList.filter((_client: ClientType) => {
-            if (_client.roleListId === currentRole.id) {
+            if (_client.roleId === currentRole.id) {
                 return _client;
             } else {
                 return null;
@@ -34,7 +34,7 @@ const ClientsTab = (props: ClientsTabProps) => {
         }));
 
         setCurrentClientList(dummyClientsList.filter((_client: ClientType) => {
-            if (_client.roleListId === currentRole.id) {
+            if (_client.roleId === currentRole.id) {
                 return _client;
             } else {
                 return null;

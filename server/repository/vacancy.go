@@ -44,7 +44,7 @@ func (db *vacancyRepository) GetVacancyWithID(id uuid.UUID) (vacancy model.Vacan
 }
 
 func (db *vacancyRepository) GetVacancyListForCompany(id uuid.UUID) (vacancyList []model.Vacancy, err error) {
-	return vacancyList, db.connection.Find(&vacancyList, "company_id=?", id).Error
+	return vacancyList, db.connection.Order("updated_at desc").Find(&vacancyList, "company_id=?", id).Error
 
 }
 

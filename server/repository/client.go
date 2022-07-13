@@ -37,7 +37,7 @@ func (db *clientRepository) GetClientWithID(id uuid.UUID) (client model.Client, 
 }
 
 func (db *clientRepository) GetAllClientList() (clientList []model.Client, err error) {
-	return clientList, db.connection.Find(&clientList).Error
+	return clientList, db.connection.Order("updated_at desc").Find(&clientList).Error
 }
 
 func (db *clientRepository) UpdateClient(client model.Client) (model.Client, error) {
@@ -49,6 +49,8 @@ func (db *clientRepository) UpdateClient(client model.Client) (model.Client, err
 		ExpectedPackage: client.ExpectedPackage,
 		Description:     client.Description,
 		WebsiteURL:      client.WebsiteURL,
+		NoticePeriod:    client.NoticePeriod,
+		RoleID:          client.RoleID,
 		FileID:          client.FileID,
 	}
 

@@ -15,6 +15,7 @@ func RunAPI(address string) error {
 	companyHandler := handler.NewCompanyHandler()
 	contactHandler := handler.NewContactHandler()
 	vacancyHandler := handler.NewVacancyHandler()
+	roleHandler := handler.NewRoleHandler()
 
 	r := gin.New()
 	// r.Use(cors.Default())
@@ -51,6 +52,15 @@ func RunAPI(address string) error {
 		clientRoutes.GET("/all", clientHandler.GetAllClientList)
 		clientRoutes.PUT("/:clientID", clientHandler.UpdateClient)
 		clientRoutes.DELETE("/:clientID", clientHandler.DeleteClient)
+	}
+
+	roleRoutes := apiRoutes.Group("/role", middleware.AuthorizeJWT())
+	{
+		roleRoutes.POST("/new", roleHandler.CreateRoleWithDetails)
+		roleRoutes.GET("/all", roleHandler.GetAllRolesList)
+		roleRoutes.GET("/:roleID", roleHandler.GetRoleById)
+		roleRoutes.PUT("/:roleID", roleHandler.UpdateRole)
+		roleRoutes.DELETE("/:roleID", roleHandler.DeleteRole)
 	}
 
 	companyRoutes := apiRoutes.Group("/company", middleware.AuthorizeJWT())

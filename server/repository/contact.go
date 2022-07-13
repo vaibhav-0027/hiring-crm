@@ -50,7 +50,7 @@ func (db *contactRepository) GetContactWithID(id uuid.UUID) (contact model.Conta
 }
 
 func (db *contactRepository) GetContactListForCompany(id uuid.UUID) (contactList []model.Contact, err error) {
-	return contactList, db.connection.Find(&contactList, "company_id=?", id).Error
+	return contactList, db.connection.Order("updated_at desc").Find(&contactList, "company_id=?", id).Error
 
 }
 

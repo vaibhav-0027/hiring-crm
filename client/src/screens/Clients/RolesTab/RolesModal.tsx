@@ -1,13 +1,18 @@
 import { Button, Modal, TextareaAutosize, TextField } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useEffect, useState } from 'react'
-import { RoleListType } from '../../../helpers/types';
+import { RoleType } from '../../../helpers/types';
 import SaveIcon from '@mui/icons-material/Save';
+import { checkEmptyInput } from '../../../helpers/emptyInputChecker';
+import { toast, ToastContainer } from 'react-toastify';
+import { DUMMY_UUID } from '../../../helpers/constants';
+import { addRoleInfo, updateRoleInfo } from './apis';
 
 interface RolesModalProps {
     open: boolean;
     handleClose: () => void;
-    currentSelected: RoleListType | null;
+    currentSelected: RoleType | null;
+    setUpdatedRoleInfo: (value: RoleType) => void;
 }
 
 const style = {
@@ -29,7 +34,8 @@ const RolesModal = (props: RolesModalProps) => {
     const {
         open,
         handleClose,
-        currentSelected } = props;
+        currentSelected,
+        setUpdatedRoleInfo } = props;
 
     const [name, setName] = useState<string>('');
     const [description, setDescription] = useState<string>('');
@@ -45,14 +51,58 @@ const RolesModal = (props: RolesModalProps) => {
         setDescription(currentSelected.description);
     }, [currentSelected]);
 
-    const _saveButtonClickHandler = () => {
-        // TODO: connect with APIs.
+    const _saveButtonClickHandler = async () => {
+        if (checkEmptyInput(name)) {
+            toast.warning("Role name cannot be empty!");
+            return;
+        }
+
+        const info = {
+            name: name.trim(),
+            description: description.trim(),
+            id: DUMMY_UUID,
+        };
+
+        if (!currentSelected) {
+            let response = await addRoleInfo(info);
+            if (!response) {
+                toast.error(`
+                Something went wrong! 
+                Possible reasons: 
+                1. role name already used.
+                2. server issue`)
+                return;
+            }
+
+            setUpdatedRoleInfo(response);
+            handleClose();
+            return;
+        }
+
+        const updatedInfo = {
+            ...info,
+            id: currentSelected.id,
+        }
+
+        let response = await updateRoleInfo(currentSelected.id, updatedInfo);
+        if (!response) {
+            toast.error(`
+            Something went wrong! 
+            Possible reasons: 
+            1. role name already used.
+            2. server issue`)
+            return;
+        }
+
+        setUpdatedRoleInfo(response);
+        handleClose();
     }
     // TODO: Style textarea similar to normal input fields.
 
     return (
         <Modal open={open} onClose={handleClose}>
             <Box sx={style}>
+                <ToastContainer />
                 <div className='text-2xl text-primary ml-2 font-bold'>
                     {currentSelected ? 'Edit' : 'Add new'}
                     <span className='ml-2'>role</span>
@@ -62,12 +112,15 @@ const RolesModal = (props: RolesModalProps) => {
                     <div className='flex flex-row'>
                         <TextField
                             placeholder='Role name...'
+                            label='Role name'
+                            required
                             value={name}
                             onChange={e => setName(e.target.value)}
                             className='w-1/2'
                         />
                     </div>
                     <div className='mt-3'>
+                        <span>Role description</span>
                         <TextareaAutosize
                             placeholder='Role description...'
                             value={description}

@@ -2,11 +2,11 @@ import { Button, TextField } from '@mui/material'
 import React, { useEffect, useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
-import { RoleListType } from '../../../helpers/types';
+import { RoleType } from '../../../helpers/types';
 import { motion } from 'framer-motion';
 
 interface SearchFilterRowProps {
-    rolesList: RoleListType[];
+    rolesList: RoleType[];
     setRolesList: any;
     setIsModalOpen: (value: boolean) => void;
     setCurrentSelected: (value: null) => void;
@@ -35,8 +35,8 @@ const SearchFilterRow = (props: SearchFilterRowProps) => {
             return;
         }
 
-        setRolesList((prev: RoleListType[]) => {
-            return prev.filter((_role: RoleListType) => {
+        setRolesList((prev: RoleType[]) => {
+            return prev.filter((_role: RoleType) => {
                 if (_role.name.toLowerCase().includes(currentSearchField)) {
                     return _role;
                 }

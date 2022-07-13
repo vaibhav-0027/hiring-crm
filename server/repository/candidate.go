@@ -50,7 +50,7 @@ func (db *candidateRepository) GetCandidateWithID(id uuid.UUID) (candidate model
 }
 
 func (db *candidateRepository) GetCandidateListForVacancy(id uuid.UUID) (candidateList []model.Candidate, err error) {
-	return candidateList, db.connection.Find(&candidateList, "vacancy_id=?", id).Error
+	return candidateList, db.connection.Order("updated_at desc").Find(&candidateList, "vacancy_id=?", id).Error
 
 }
 

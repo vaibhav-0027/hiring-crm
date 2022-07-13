@@ -5,7 +5,7 @@ import Tab from '@mui/material/Tab';
 import React, { useState } from 'react';
 import RolesTab from './RolesTab/index'
 import ClientsTab from './ClientsTab/index';
-import { RoleListType } from '../../helpers/types';
+import { RoleType } from '../../helpers/types';
 
 interface TabPanelProps {
 	children?: React.ReactNode;
@@ -43,7 +43,7 @@ const a11yProps = (index: number) => {
 const Clients = () => {
 
 	const [tabIndex, setTabIndex] = useState<number>(0);
-	const [currentRole, setCurrentRole] = useState<RoleListType | null>(null);
+	const [currentRole, setCurrentRole] = useState<RoleType | null>(null);
 
 	const _tabChangeHandler = (event: React.SyntheticEvent, newValue: number) => {
 		setTabIndex(newValue);

@@ -69,7 +69,7 @@ const ClientsModal = (props: ClientModalProps) => {
         setExpectedPackage(currentSelected.expectedPackage);
         setWebsiteUrl(currentSelected.websiteUrl);
         setNoticePeriod(currentSelected.noticePeriod);
-        setRoleId(currentSelected.roleListId);
+        setRoleId(currentSelected.roleId);
     }, [currentSelected]);
 
     const _mobileNumberChangeHandler = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {

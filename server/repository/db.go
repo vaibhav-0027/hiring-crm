@@ -36,6 +36,7 @@ func DB() *gorm.DB {
 		&model.Company{},
 		&model.Contact{},
 		&model.File{},
-		&model.Vacancy{})
+		&model.Vacancy{},
+		&model.Role{})
 	return db
 }

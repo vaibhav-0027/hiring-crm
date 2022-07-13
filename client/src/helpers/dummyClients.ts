@@ -1,6 +1,6 @@
-import { ClientType, RoleListType } from "./types";
+import { ClientType, RoleType } from "./types";
 
-export const dummyRolesList: RoleListType[] = [
+export const dummyRolesList: RoleType[] = [
     {
         id: 'role-id1',
         name: 'SDE',
@@ -42,7 +42,8 @@ export const dummyClientsList: ClientType[] = [
         linkedinUrl: '',
         websiteUrl: '',
         noticePeriod: 10,
-        roleListId: 'role-id1',
+        roleId: 'role-id1',
+        fileId: ''
     },
     {
         id: 'client-2',
@@ -55,7 +56,8 @@ export const dummyClientsList: ClientType[] = [
         linkedinUrl: '',
         websiteUrl: '',
         noticePeriod: 20,
-        roleListId: 'role-id2',
+        roleId: 'role-id2',
+        fileId: ''
     },
     {
         id: 'client-3',
@@ -68,7 +70,8 @@ export const dummyClientsList: ClientType[] = [
         linkedinUrl: '',
         websiteUrl: '',
         noticePeriod: 30,
-        roleListId: 'role-id3',
+        roleId: 'role-id3',
+        fileId: ''
     },
     {
         id: 'client-4',
@@ -81,6 +84,7 @@ export const dummyClientsList: ClientType[] = [
         linkedinUrl: '',
         websiteUrl: '',
         noticePeriod: 10,
-        roleListId: 'role-id1',
+        roleId: 'role-id1',
+        fileId: ''
     },
 ]
