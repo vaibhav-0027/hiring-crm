@@ -11,6 +11,16 @@ export const fetchAllRolesList = async () => {
         });
 }
 
+export const fetchRolesIdNameMap = async () => {
+    return dash_api.get('/role/all/map')
+        .then((res) => {
+            return res.data;
+        })
+        .then((data: object) => {
+            return data;
+        });
+}
+
 export const updateRoleInfo = async (id: string, updatedInfo: RoleType) => {
     return dash_api.put(`/role/${id}`, updatedInfo)
         .then((res) => {

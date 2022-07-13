@@ -4,12 +4,19 @@ import React, { useEffect, useState } from 'react'
 import { ClientType } from '../../../helpers/types';
 import SaveIcon from '@mui/icons-material/Save';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { toast, ToastContainer } from 'react-toastify';
+import { checkEmptyInput } from '../../../helpers/emptyInputChecker';
+import isEmail from 'validator/lib/isEmail';
+import isURL from 'validator/lib/isURL';
+import { DUMMY_UUID } from '../../../helpers/constants';
+import { addClientInfo, updateClientInfo } from './apis';
 
 interface ClientModalProps {
     open: boolean;
     handleClose: () => void;
     currentSelected: ClientType | null;
     roleIdNameMap: any;
+    setUpdatedClientInfo: (value: ClientType) => void;
 }
 
 const style = {
@@ -32,7 +39,8 @@ const ClientsModal = (props: ClientModalProps) => {
         open,
         handleClose,
         currentSelected,
-        roleIdNameMap } = props;
+        roleIdNameMap,
+        setUpdatedClientInfo } = props;
 
     const [name, setName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
@@ -85,14 +93,98 @@ const ClientsModal = (props: ClientModalProps) => {
         setRoleId(event.target.value as string);
     }
 
-    const _saveButtonClickHandler = () => {
-        // TODO: connect with APIs.
+    const _saveButtonClickHandler = async () => {
+        if (checkEmptyInput(name)) {
+            toast.warning("Client name cannot be empty!")
+            return;
+        }
+
+        if (checkEmptyInput(email)) {
+            toast.warning("Client email cannot be empty!")
+            return;
+        }
+
+        if (!isEmail(email)) {
+            toast.warning("Client email is not valid!")
+            return;
+        }
+
+        if (!checkEmptyInput("" + mobileNumber) && ("" + mobileNumber).length !== 10) {
+            toast.warning("Enter valid mobile number!")
+            return;
+        }
+
+        if (!checkEmptyInput(linkedinUrl) && !isURL(linkedinUrl)) {
+            toast.warning("Linkedin url is not valid!")
+            return;
+        }
+
+        if (!checkEmptyInput(websiteUrl) && !isURL(websiteUrl)) {
+            toast.warning("website url is not valid!")
+            return;
+        }
+
+        if (roleId === "") {
+            toast.warning("Select a role for the client!")
+            return;
+        }
+
+        const info = {
+            id: DUMMY_UUID,
+            name: name.trim(),
+            email: email.trim(),
+            description: description.trim(),
+            mobileNumber: mobileNumber || 0,
+            linkedinUrl,
+            currentPackage,
+            expectedPackage,
+            websiteUrl,
+            noticePeriod,
+            roleId,
+            fileId: DUMMY_UUID,
+        };
+
+        if (!currentSelected) {
+            let response = await addClientInfo(info);
+            if (!response) {
+                toast.error(`
+                Something went wrong! 
+                Possible reasons: 
+                1. email already used.
+                2. server issue`)
+                return;
+            }
+
+            setUpdatedClientInfo(response);
+            handleClose();
+            return;
+        }
+
+        const updatedInfo = {
+            ...info,
+            id: currentSelected.id,
+        }
+
+        let response = await updateClientInfo(currentSelected.id, updatedInfo)
+        if (!response) {
+            toast.error(`
+            Something went wrong! 
+            Possible reasons: 
+            1. email already used.
+            2. server issue`)
+            return;
+        }
+
+        setUpdatedClientInfo(response);
+        handleClose();
     }
     // TODO: Style textarea similar to normal input fields.
 
     return (
         <Modal open={open} onClose={handleClose}>
             <Box sx={style}>
+                {/* <ToastContainer /> */}
+
                 <div className='text-2xl text-primary ml-2 font-bold'>
                     {currentSelected ? 'Edit' : 'Add new'}
                     <span className='ml-2'>client</span>
@@ -102,15 +194,20 @@ const ClientsModal = (props: ClientModalProps) => {
                     <div className='flex flex-row'>
                         <TextField
                             placeholder='Client name...'
+                            label='Client name'
+                            required
                             value={name}
                             onChange={e => setName(e.target.value)}
                             className='w-1/2'
                         />
                     </div>
+
                     <div className='flex flex-row w-full mt-3'>
                         <div className='w-2/4'>
                             <TextField
                                 placeholder='Email...'
+                                label='Email'
+                                required
                                 value={email}
                                 onChange={e => setEmail(e.target.value)}
                                 className='w-11/12'
@@ -119,6 +216,7 @@ const ClientsModal = (props: ClientModalProps) => {
                         <div className='w-2/4'>
                             <TextField
                                 placeholder='Mobile number...'
+                                label='Mobile number'
                                 value={mobileNumber}
                                 onChange={_mobileNumberChangeHandler}
                                 className='w-11/12'
@@ -126,18 +224,22 @@ const ClientsModal = (props: ClientModalProps) => {
                             />
                         </div>
                     </div>
+
                     <div className='flex flex-row w-full mt-3'>
                         <div className='w-2/4'>
                             <TextField
                                 placeholder='Current package...'
+                                label='Current package'
                                 value={currentPackage}
                                 onChange={e => setCurrentPackage(parseInt(e.target.value))}
                                 className='w-11/12'
+                                type='number'
                             />
                         </div>
                         <div className='w-2/4'>
                             <TextField
                                 placeholder='Expected package...'
+                                label='Expected package'
                                 value={expectedPackage}
                                 onChange={e => setExpectedPackage(parseInt(e.target.value))}
                                 className='w-11/12'
@@ -145,10 +247,12 @@ const ClientsModal = (props: ClientModalProps) => {
                             />
                         </div>
                     </div>
+
                     <div className='flex flex-row w-full mt-3'>
                         <div className='w-2/4'>
                             <TextField
                                 placeholder='Website...'
+                                label='Website url'
                                 value={websiteUrl}
                                 onChange={e => setWebsiteUrl(e.target.value)}
                                 className='w-11/12'
@@ -157,6 +261,7 @@ const ClientsModal = (props: ClientModalProps) => {
                         <div className='w-2/4'>
                             <TextField
                                 placeholder='Notice period...'
+                                label='Notice period'
                                 value={noticePeriod}
                                 onChange={e => setNoticePeriod(parseInt(e.target.value))}
                                 className='w-11/12'
@@ -164,9 +269,11 @@ const ClientsModal = (props: ClientModalProps) => {
                             />
                         </div>
                     </div>
+
                     <div className='flex flex-row w-full mt-3'>
                         <div className='w-2/4'>
                             <TextField
+                                label='Linkedin url'
                                 placeholder='Linkedin url...'
                                 value={linkedinUrl}
                                 onChange={e => setLinkedinUrl(e.target.value)}
@@ -192,7 +299,9 @@ const ClientsModal = (props: ClientModalProps) => {
                             </Select>
                         </div>
                     </div>
+
                     <div className='mt-3'>
+                        <span>About the client</span>
                         <TextareaAutosize
                             placeholder='Client description...'
                             value={description}

@@ -15,6 +15,7 @@ import (
 type RoleHandler interface {
 	CreateRoleWithDetails(ctx *gin.Context)
 	GetAllRolesList(ctx *gin.Context)
+	GetRolesIdNameMap(ctx *gin.Context)
 	GetRoleById(ctx *gin.Context)
 	UpdateRole(ctx *gin.Context)
 	DeleteRole(ctx *gin.Context)
@@ -72,6 +73,31 @@ func (h *roleHandler) GetAllRolesList(ctx *gin.Context) {
 		zap.String("role", fmt.Sprint(roleList)),
 	)
 	ctx.JSON(http.StatusOK, roleList)
+}
+
+func (h *roleHandler) GetRolesIdNameMap(ctx *gin.Context) {
+	roleList, err := h.repo.GetAllRolesList()
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		utils.Logger.Debug(
+			"Internal server error while fetching role list.",
+			zap.String("request", fmt.Sprint(ctx.Keys)),
+			zap.Error(err),
+		)
+		return
+	}
+
+	res := map[string]string{}
+	for i := 0; i < len(roleList); i++ {
+		key := roleList[i].ID.String()
+		value := roleList[i].Name
+
+		res[key] = value
+	}
+
+	ctx.JSON(http.StatusOK, res)
 }
 
 func (h *roleHandler) GetRoleById(ctx *gin.Context) {

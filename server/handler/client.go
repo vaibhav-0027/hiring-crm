@@ -15,6 +15,7 @@ import (
 type ClientHandler interface {
 	CreateClient(ctx *gin.Context)
 	GetClientWithID(ctx *gin.Context)
+	GetAllClientForRole(ctx *gin.Context)
 	GetAllClientList(ctx *gin.Context)
 	UpdateClient(ctx *gin.Context)
 	DeleteClient(ctx *gin.Context)
@@ -97,6 +98,27 @@ func (h *clientHandler) GetClientWithID(ctx *gin.Context) {
 		zap.String("client", fmt.Sprint(client)),
 	)
 	ctx.JSON(http.StatusOK, client)
+}
+
+func (h *clientHandler) GetAllClientForRole(ctx *gin.Context) {
+	roleIDStr := ctx.Param("roleID")
+	roleID, err := uuid.Parse(roleIDStr)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	roleList, err := h.repo.GetAllClientForRole(roleID)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, roleList)
 }
 
 func (h *clientHandler) GetAllClientList(ctx *gin.Context) {

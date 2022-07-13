@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
+import { toast, ToastContainer } from 'react-toastify';
 import { dummyClientsList, dummyRoleIdNameMap } from '../../../helpers/dummyClients';
 import { ClientType, RoleType } from '../../../helpers/types';
+import { fetchRolesIdNameMap } from '../RolesTab/apis';
+import { fetchClientsListForRole } from './apis';
 import ClientsModal from './ClientsModal';
 import ClientsTable from './ClientsTable';
 import SearchFilterRow from './SearchFilterRow';
@@ -18,34 +21,67 @@ const ClientsTab = (props: ClientsTabProps) => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [currentSelected, setCurrentSelected] = useState<ClientType | null>(null);
     const [roleIdNameMap, setRoleIdNameMap] = useState<object>({});
+    const [updatedClientInfo, setUpdatedClientInfo] = useState<ClientType | null>(null);
 
     useEffect(() => {
         if (!currentRole) {
             return;
         }
-        // TODO: use currentRole to fetch clientsList from backend.
 
-        setFullClientsList(dummyClientsList.filter((_client: ClientType) => {
-            if (_client.roleId === currentRole.id) {
-                return _client;
-            } else {
-                return null;
-            }
-        }));
-
-        setCurrentClientList(dummyClientsList.filter((_client: ClientType) => {
-            if (_client.roleId === currentRole.id) {
-                return _client;
-            } else {
-                return null;
-            }
-        }));
-
-        setRoleIdNameMap(dummyRoleIdNameMap);
+        (async () => {
+            const data = await fetchClientsListForRole(currentRole.id);
+            setFullClientsList(data);
+            setCurrentClientList(data);
+        })()
     }, [currentRole]);
+
+    useEffect(() => {
+
+        (async () => {
+            const data = await fetchRolesIdNameMap();
+            setRoleIdNameMap(data);
+        })()
+    }, []);
+
+    useEffect(() => {
+        if (!updatedClientInfo) {
+            return;
+        }
+
+        let found = false;
+        let tempFullList = fullClientsList;
+        let tempCurrentList = currentClientList;
+
+        tempFullList = tempFullList.map(_current => {
+            if (_current.id === updatedClientInfo.id) {
+                found = true;
+                return updatedClientInfo;
+            }
+
+            return _current;
+        });
+
+        tempCurrentList = tempCurrentList.map(_current => {
+            if (_current.id === updatedClientInfo.id) {
+                return updatedClientInfo;
+            }
+
+            return _current;
+        });
+
+        if (!found) {
+            tempFullList.push(updatedClientInfo);
+            tempCurrentList.push(updatedClientInfo);
+        }
+
+        setFullClientsList(tempFullList);
+        setCurrentClientList(tempCurrentList);
+    }, [updatedClientInfo]);
 
     return (
         <div>
+            <ToastContainer />
+
             <SearchFilterRow
                 clientsList={fullClientsList}
                 setClientsList={setCurrentClientList}
@@ -64,6 +100,7 @@ const ClientsTab = (props: ClientsTabProps) => {
                 handleClose={() => setIsModalOpen(false)}
                 open={isModalOpen}
                 roleIdNameMap={roleIdNameMap}
+                setUpdatedClientInfo={setUpdatedClientInfo}
             />
         </div>
     )

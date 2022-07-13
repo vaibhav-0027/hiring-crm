@@ -49,6 +49,7 @@ func RunAPI(address string) error {
 	{
 		clientRoutes.POST("/new", clientHandler.CreateClient)
 		clientRoutes.GET("/:clientID", clientHandler.GetClientWithID)
+		clientRoutes.GET("/role/:roleID", clientHandler.GetAllClientForRole)
 		clientRoutes.GET("/all", clientHandler.GetAllClientList)
 		clientRoutes.PUT("/:clientID", clientHandler.UpdateClient)
 		clientRoutes.DELETE("/:clientID", clientHandler.DeleteClient)
@@ -58,6 +59,7 @@ func RunAPI(address string) error {
 	{
 		roleRoutes.POST("/new", roleHandler.CreateRoleWithDetails)
 		roleRoutes.GET("/all", roleHandler.GetAllRolesList)
+		roleRoutes.GET("/all/map", roleHandler.GetRolesIdNameMap)
 		roleRoutes.GET("/:roleID", roleHandler.GetRoleById)
 		roleRoutes.PUT("/:roleID", roleHandler.UpdateRole)
 		roleRoutes.DELETE("/:roleID", roleHandler.DeleteRole)

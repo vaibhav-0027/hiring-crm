@@ -19,6 +19,7 @@ const SearchFilterRow = (props: SearchFilterRowProps) => {
         setClientsList,
         setIsModalOpen,
         setCurrentSelected } = props;
+
     const [isHovering, setIsHovering] = useState<boolean>(false);
     const [searchField, setSearchField] = useState<string>('');
 

@@ -10,6 +10,7 @@ import (
 type ClientRepository interface {
 	CreateClient(model.Client) (model.Client, error)
 	GetClientWithID(uuid.UUID) (model.Client, error)
+	GetAllClientForRole(uuid.UUID) ([]model.Client, error)
 	GetAllClientList() ([]model.Client, error)
 	UpdateClient(model.Client) (model.Client, error)
 	DeleteClient(model.Client) (model.Client, error)
@@ -34,6 +35,10 @@ func (db *clientRepository) CreateClient(client model.Client) (model.Client, err
 func (db *clientRepository) GetClientWithID(id uuid.UUID) (client model.Client, err error) {
 	return client, db.connection.First(&client, id).Error
 
+}
+
+func (db *clientRepository) GetAllClientForRole(id uuid.UUID) (clientList []model.Client, err error) {
+	return clientList, db.connection.Order("updated_at desc").Find(&clientList, "role_id=?", id).Error
 }
 
 func (db *clientRepository) GetAllClientList() (clientList []model.Client, err error) {
