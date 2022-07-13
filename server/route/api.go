@@ -13,7 +13,7 @@ func RunAPI(address string) error {
 	candidateHandler := handler.NewCandidateHandler()
 	clientHandler := handler.NewClientHandler()
 	companyHandler := handler.NewCompanyHandler()
-	companyClientHandler := handler.NewCompanyClientHandler()
+	contactHandler := handler.NewContactHandler()
 	vacancyHandler := handler.NewVacancyHandler()
 
 	r := gin.New()
@@ -58,17 +58,19 @@ func RunAPI(address string) error {
 		companyRoutes.POST("/new", companyHandler.CreateCompanyWithDetails)
 		companyRoutes.GET("/:companyID", companyHandler.GetCompanyWithID)
 		companyRoutes.GET("/all", companyHandler.GetAllCompanyList)
+		companyRoutes.GET("/all/map", companyHandler.GetCompanyIdNameMap)
 		companyRoutes.PUT("/:companyID", companyHandler.UpdateCompany)
 		companyRoutes.DELETE("/:companyID", companyHandler.DeleteCompany)
 	}
 
-	companyClientRoutes := apiRoutes.Group("/company-client", middleware.AuthorizeJWT())
+	contactRoutes := apiRoutes.Group("/contact", middleware.AuthorizeJWT())
 	{
-		companyClientRoutes.POST("/new", companyClientHandler.CreateCompanyClient)
-		companyClientRoutes.GET("/:companyClientID", companyClientHandler.GetCompanyClientWithID)
-		companyClientRoutes.GET("/company/:companyID", companyClientHandler.GetCompanyClientListForCompany)
-		companyClientRoutes.PUT("/:companyClientID", companyClientHandler.UpdateCompanyClient)
-		companyClientRoutes.DELETE("/:companyClientID", companyClientHandler.DeleteCompanyClient)
+		contactRoutes.POST("/new", contactHandler.CreateContact)
+		contactRoutes.GET("/all", contactHandler.GetAllContactList)
+		contactRoutes.GET("/:contactID", contactHandler.GetContactWithID)
+		contactRoutes.GET("/company/:companyID", contactHandler.GetContactListForCompany)
+		contactRoutes.PUT("/:contactID", contactHandler.UpdateContact)
+		contactRoutes.DELETE("/:contactID", contactHandler.DeleteContact)
 	}
 
 	vacancyRoutes := apiRoutes.Group("/vacancy", middleware.AuthorizeJWT())

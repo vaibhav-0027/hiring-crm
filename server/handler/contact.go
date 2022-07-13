@@ -12,28 +12,29 @@ import (
 	"go.uber.org/zap"
 )
 
-type CompanyClientHandler interface {
-	CreateCompanyClient(ctx *gin.Context)
-	GetCompanyClientWithID(ctx *gin.Context)
-	GetCompanyClientListForCompany(ctx *gin.Context)
-	UpdateCompanyClient(ctx *gin.Context)
-	DeleteCompanyClient(ctx *gin.Context)
+type ContactHandler interface {
+	CreateContact(ctx *gin.Context)
+	GetAllContactList(ctx *gin.Context)
+	GetContactWithID(ctx *gin.Context)
+	GetContactListForCompany(ctx *gin.Context)
+	UpdateContact(ctx *gin.Context)
+	DeleteContact(ctx *gin.Context)
 }
 
-type companyClientHandler struct {
-	repo repository.CompanyClientRepository
+type contactHandler struct {
+	repo repository.ContactRepository
 }
 
-func NewCompanyClientHandler() CompanyClientHandler {
-	return &companyClientHandler{
-		repo: repository.NewCompanyClientRepository(),
+func NewContactHandler() ContactHandler {
+	return &contactHandler{
+		repo: repository.NewContactRepository(),
 	}
 }
 
 // -------------- Create methods -----------------
-func (h *companyClientHandler) CreateCompanyClient(ctx *gin.Context) {
-	var companyClient model.CompanyClient
-	if err := ctx.ShouldBindJSON(&companyClient); err != nil {
+func (h *contactHandler) CreateContact(ctx *gin.Context) {
+	var contact model.Contact
+	if err := ctx.ShouldBindJSON(&contact); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
@@ -44,13 +45,13 @@ func (h *companyClientHandler) CreateCompanyClient(ctx *gin.Context) {
 		return
 	}
 
-	companyClient, err := h.repo.CreateCompanyClient(companyClient)
+	contact, err := h.repo.CreateContact(contact)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})
 		utils.Logger.Debug(
-			"Internal server error while creating companyClient.",
+			"Internal server error while creating contact.",
 			zap.String("request", fmt.Sprint(ctx.Keys)),
 			zap.Error(err),
 		)
@@ -58,16 +59,37 @@ func (h *companyClientHandler) CreateCompanyClient(ctx *gin.Context) {
 	}
 
 	utils.Logger.Debug(
-		"Created CompanyClient successfully.",
-		zap.String("companyClient", fmt.Sprint(companyClient)),
+		"Created Contact successfully.",
+		zap.String("contact", fmt.Sprint(contact)),
 	)
-	ctx.JSON(http.StatusOK, companyClient)
+	ctx.JSON(http.StatusOK, contact)
 }
 
 // -------------- Read methods ------------------
-func (h *companyClientHandler) GetCompanyClientWithID(ctx *gin.Context) {
-	companyClientIDStr := ctx.Param("companyClientID")
-	companyClientID, err := uuid.Parse(companyClientIDStr)
+func (h *contactHandler) GetAllContactList(ctx *gin.Context) {
+	contactList, err := h.repo.GetAllContactList()
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		utils.Logger.Debug(
+			"Internal server error while fetching company list.",
+			zap.String("request", fmt.Sprint(ctx.Keys)),
+			zap.Error(err),
+		)
+		return
+	}
+
+	utils.Logger.Debug(
+		"GetAllContactList fetched successfully.",
+		zap.String("contact", fmt.Sprint(contactList)),
+	)
+	ctx.JSON(http.StatusOK, contactList)
+}
+
+func (h *contactHandler) GetContactWithID(ctx *gin.Context) {
+	contactIDStr := ctx.Param("contactID")
+	contactID, err := uuid.Parse(contactIDStr)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
@@ -79,13 +101,13 @@ func (h *companyClientHandler) GetCompanyClientWithID(ctx *gin.Context) {
 		return
 	}
 
-	companyClient, err := h.repo.GetCompanyClientWithID(companyClientID)
+	contact, err := h.repo.GetContactWithID(contactID)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})
 		utils.Logger.Debug(
-			"Internal server error while fetching companyClient using ID.",
+			"Internal server error while fetching contact using ID.",
 			zap.String("request", fmt.Sprint(ctx.Keys)),
 			zap.Error(err),
 		)
@@ -93,13 +115,13 @@ func (h *companyClientHandler) GetCompanyClientWithID(ctx *gin.Context) {
 	}
 
 	utils.Logger.Debug(
-		"Get CompanyClient with ID fetched successfully.",
-		zap.String("companyClient", fmt.Sprint(companyClient)),
+		"Get Contact with ID fetched successfully.",
+		zap.String("contact", fmt.Sprint(contact)),
 	)
-	ctx.JSON(http.StatusOK, companyClient)
+	ctx.JSON(http.StatusOK, contact)
 }
 
-func (h *companyClientHandler) GetCompanyClientListForCompany(ctx *gin.Context) {
+func (h *contactHandler) GetContactListForCompany(ctx *gin.Context) {
 	companyIDStr := ctx.Param("companyID")
 	companyID, err := uuid.Parse(companyIDStr)
 	if err != nil {
@@ -113,13 +135,13 @@ func (h *companyClientHandler) GetCompanyClientListForCompany(ctx *gin.Context) 
 		return
 	}
 
-	companyClientList, err := h.repo.GetCompanyClientListForCompany(companyID)
+	contactList, err := h.repo.GetContactListForCompany(companyID)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})
 		utils.Logger.Debug(
-			"Internal server error while fetching companyClients for company.",
+			"Internal server error while fetching contacts for company.",
 			zap.String("request", fmt.Sprint(ctx.Keys)),
 			zap.Error(err),
 		)
@@ -127,16 +149,16 @@ func (h *companyClientHandler) GetCompanyClientListForCompany(ctx *gin.Context) 
 	}
 
 	utils.Logger.Debug(
-		"Get CompanyClient List for vacancy fetched successfully.",
-		zap.String("companyClientList", fmt.Sprint(companyClientList)),
+		"Get Contact List for vacancy fetched successfully.",
+		zap.String("contactList", fmt.Sprint(contactList)),
 	)
-	ctx.JSON(http.StatusOK, companyClientList)
+	ctx.JSON(http.StatusOK, contactList)
 }
 
 // -------------- Update methods ------------------
-func (h *companyClientHandler) UpdateCompanyClient(ctx *gin.Context) {
-	var companyClient model.CompanyClient
-	if err := ctx.ShouldBindJSON(&companyClient); err != nil {
+func (h *contactHandler) UpdateContact(ctx *gin.Context) {
+	var contact model.Contact
+	if err := ctx.ShouldBindJSON(&contact); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
@@ -147,8 +169,8 @@ func (h *companyClientHandler) UpdateCompanyClient(ctx *gin.Context) {
 		return
 	}
 
-	companyClientIDStr := ctx.Param("companyClientID")
-	companyClientID, err := uuid.Parse(companyClientIDStr)
+	contactIDStr := ctx.Param("contactID")
+	contactID, err := uuid.Parse(contactIDStr)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
@@ -160,14 +182,14 @@ func (h *companyClientHandler) UpdateCompanyClient(ctx *gin.Context) {
 		return
 	}
 
-	companyClient.ID = companyClientID
-	companyClient, err = h.repo.UpdateCompanyClient(companyClient)
+	contact.ID = contactID
+	contact, err = h.repo.UpdateContact(contact)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})
 		utils.Logger.Debug(
-			"Internal server error while updaing companyClient details.",
+			"Internal server error while updaing contact details.",
 			zap.String("request", fmt.Sprint(ctx.Keys)),
 			zap.Error(err),
 		)
@@ -175,17 +197,17 @@ func (h *companyClientHandler) UpdateCompanyClient(ctx *gin.Context) {
 	}
 
 	utils.Logger.Debug(
-		"Updated CompanyClient successfully.",
-		zap.String("companyClient", fmt.Sprint(companyClient)),
+		"Updated Contact successfully.",
+		zap.String("contact", fmt.Sprint(contact)),
 	)
-	ctx.JSON(http.StatusOK, companyClient)
+	ctx.JSON(http.StatusOK, contact)
 }
 
 // -------------- Delete methods -------------------
-func (h *companyClientHandler) DeleteCompanyClient(ctx *gin.Context) {
-	var companyClient model.CompanyClient
-	companyClientIDStr := ctx.Param("companyClientID")
-	companyClientID, err := uuid.Parse(companyClientIDStr)
+func (h *contactHandler) DeleteContact(ctx *gin.Context) {
+	var contact model.Contact
+	contactIDStr := ctx.Param("contactID")
+	contactID, err := uuid.Parse(contactIDStr)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
@@ -197,14 +219,14 @@ func (h *companyClientHandler) DeleteCompanyClient(ctx *gin.Context) {
 		return
 	}
 
-	companyClient.ID = companyClientID
-	companyClient, err = h.repo.DeleteCompanyClient(companyClient)
+	contact.ID = contactID
+	contact, err = h.repo.DeleteContact(contact)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})
 		utils.Logger.Debug(
-			"Internal server error while deleting companyClient.",
+			"Internal server error while deleting contact.",
 			zap.String("request", fmt.Sprint(ctx.Keys)),
 			zap.Error(err),
 		)
@@ -212,8 +234,8 @@ func (h *companyClientHandler) DeleteCompanyClient(ctx *gin.Context) {
 	}
 
 	utils.Logger.Debug(
-		"Deleted CompanyClient successfully.",
-		zap.String("companyClient", fmt.Sprint(companyClient)),
+		"Deleted Contact successfully.",
+		zap.String("contact", fmt.Sprint(contact)),
 	)
-	ctx.JSON(http.StatusOK, companyClient)
+	ctx.JSON(http.StatusOK, contact)
 }

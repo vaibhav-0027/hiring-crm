@@ -17,6 +17,7 @@ type CompanyHandler interface {
 	CreateCompanyWithDetails(ctx *gin.Context)
 	GetCompanyWithID(ctx *gin.Context)
 	GetAllCompanyList(ctx *gin.Context)
+	GetCompanyIdNameMap(ctx *gin.Context)
 	UpdateCompany(ctx *gin.Context)
 	DeleteCompany(ctx *gin.Context)
 }
@@ -124,6 +125,31 @@ func (h *companyHandler) GetAllCompanyList(ctx *gin.Context) {
 		zap.String("company", fmt.Sprint(companyList)),
 	)
 	ctx.JSON(http.StatusOK, companyList)
+}
+
+func (h *companyHandler) GetCompanyIdNameMap(ctx *gin.Context) {
+	companyList, err := h.repo.GetAllCompanyList()
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		utils.Logger.Debug(
+			"Internal server error while fetching company list.",
+			zap.String("request", fmt.Sprint(ctx.Keys)),
+			zap.Error(err),
+		)
+		return
+	}
+
+	res := map[string]string{}
+	for i := 0; i < len(companyList); i++ {
+		key := companyList[i].ID.String()
+		value := companyList[i].Name
+
+		res[key] = value
+	}
+
+	ctx.JSON(http.StatusOK, res)
 }
 
 // ------------------ Update methods -------------------

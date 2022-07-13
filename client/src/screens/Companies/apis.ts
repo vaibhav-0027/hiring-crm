@@ -11,10 +11,19 @@ export const fetchCompanyList = async () => {
         });
 }
 
+export const fetchCompanyIdNameMap = async () => {
+    return dash_api.get('/company/all/map')
+        .then((res) => {
+            return res.data
+        })
+        .then((data: object) => {
+            return data;
+        });
+}
+
 export const updateCompanyInfo = async (id: string, updatedInfo: CompanyType) => {
     return dash_api.put(`/company/${id}`, updatedInfo)
         .then((res) => {
-            console.log(res);
             return res.data
         })
         .then((data: CompanyType) => {
@@ -25,7 +34,6 @@ export const updateCompanyInfo = async (id: string, updatedInfo: CompanyType) =>
 export const addCompanyInfo = async (info: CompanyType) => {
     return dash_api.post('/company/new', info)
         .then((res) => {
-            console.log(res);
             return res.data
         })
         .then((data: CompanyType) => {

@@ -2,7 +2,7 @@ package model
 
 import "github.com/google/uuid"
 
-type CompanyClient struct {
+type Contact struct {
 	Base
 	Name         string    `json:"name" binding:"required"`
 	Email        string    `json:"email" binding:"required" gorm:"unique"`
@@ -14,6 +14,6 @@ type CompanyClient struct {
 	// File         File    `gorm:"foreignKey:FileID"`
 }
 
-func (u *CompanyClient) TableName() string {
-	return "company_client"
+func (u *Contact) TableName() string {
+	return "contact"
 }
