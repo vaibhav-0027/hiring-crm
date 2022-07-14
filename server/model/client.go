@@ -12,7 +12,9 @@ type Client struct {
 	Description     string    `json:"description"`
 	LinkedinURL     string    `json:"linkedinUrl"`
 	WebsiteURL      string    `json:"websiteUrl"`
-	NoticePeriod    int32     `json:"noticePeriod"`
+	NoticePeriod    string    `json:"noticePeriod"`
+	Location        string    `json:"location"`
+	Experience      float32   `json:"experience"`
 	RoleID          uuid.UUID `json:"roleId"`
 	FileID          uuid.UUID `json:"fileId"`
 	// FileID            File    `gorm:"foreignKey:FileID"`

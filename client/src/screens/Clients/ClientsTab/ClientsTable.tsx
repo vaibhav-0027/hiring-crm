@@ -108,11 +108,14 @@ const ClientsTable = (props: ClientsTableProps) => {
             <table className='w-full'>
                 <thead className='w-full'>
                     <tr className='w-full'>
-                        <th className='w-2/12'>Name</th>
-                        <th className='w-2/12'>Email</th>
-                        <th className='w-2/12'>Mobile Number</th>
-                        <th className='w-2/12'>Expected CTC</th>
-                        <th className='w-4/12'>Description</th>
+                        <th className='w-'>Name</th>
+                        <th className=''>Email</th>
+                        <th className=''>Mobile Number</th>
+                        <th className=''>Location</th>
+                        <th className=''>Current CTC</th>
+                        <th className=''>Expected CTC</th>
+                        <th className=''>Notice period</th>
+                        <th className=''>Description</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -121,7 +124,7 @@ const ClientsTable = (props: ClientsTableProps) => {
                         : clientsList
                     ).map((_client) => (
                         <tr key={_client.id}>
-                            <td className='w-2/12' align='justify'>
+                            <td className='w' align='justify'>
                                 <div className='w-full'>
                                     <span
                                         onClick={() => _selectRowHandler(_client)}
@@ -137,16 +140,25 @@ const ClientsTable = (props: ClientsTableProps) => {
                                     />
                                 </div>
                             </td>
-                            <td className='w-2/12'>
+                            <td className=''>
                                 {_client.email}
                             </td>
-                            <td className='w-2/12'>
+                            <td className=''>
                                 {_client.mobileNumber}
                             </td>
-                            <td className='w-2/12'>
+                            <td>
+                                {_client.location}
+                            </td>
+                            <td>
+                                {_client.currentPackage}
+                            </td>
+                            <td className=''>
                                 {_client.expectedPackage}
                             </td>
-                            <td className='w-4/12' align='justify' >
+                            <td>
+                                {_client.noticePeriod}
+                            </td>
+                            <td className='' align='justify' >
                                 {_client.description}
                             </td>
                         </tr>
@@ -161,7 +173,7 @@ const ClientsTable = (props: ClientsTableProps) => {
                     <tr>
                         <CustomTablePagination
                             rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                            colSpan={5}
+                            colSpan={8}
                             count={clientsList.length}
                             rowsPerPage={rowsPerPage}
                             page={page}

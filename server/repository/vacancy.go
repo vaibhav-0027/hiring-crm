@@ -81,22 +81,7 @@ func (db *vacancyRepository) UpdateVacancy(vacancy model.Vacancy) (model.Vacancy
 	}
 
 	return vacancy,
-		db.connection.
-			Model(&vacancy).
-			Updates(updatedVacancy).
-			Error
-	// return vacancy, db.connection.Model(&vacancy).Updates(map[string]interface{}{
-	// 	"role_name":       updatedVacancy.RoleName,
-	// 	"package_min":     updatedVacancy.PackageMin,
-	// 	"package_max":     updatedVacancy.PackageMax,
-	// 	"job_description": updatedVacancy.JobDescription,
-	// 	"count_open":      updatedVacancy.CountOpen,
-	// 	"count_closed":    updatedVacancy.CountClosed,
-	// 	"is_open":         updatedVacancy.IsOpen,
-	// 	"stages":          updatedVacancy.Stages,
-	// 	"company_id":      updatedVacancy.CompanyID,
-	// 	"file_id":         updatedVacancy.FileID,
-	// }).Error
+		db.connection.Model(&vacancy).Updates(updatedVacancy).Error
 }
 
 func (db *vacancyRepository) DeleteVacancy(vacancy model.Vacancy) (model.Vacancy, error) {

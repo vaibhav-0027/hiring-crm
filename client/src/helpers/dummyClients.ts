@@ -41,9 +41,11 @@ export const dummyClientsList: ClientType[] = [
         description: 'asdf',
         linkedinUrl: '',
         websiteUrl: '',
-        noticePeriod: 10,
+        noticePeriod: '10',
+        location: 'Remote',
         roleId: 'role-id1',
-        fileId: ''
+        fileId: '',
+        experience: 1,
     },
     {
         id: 'client-2',
@@ -55,9 +57,11 @@ export const dummyClientsList: ClientType[] = [
         description: 'asdfasdfasdf',
         linkedinUrl: '',
         websiteUrl: '',
-        noticePeriod: 20,
+        noticePeriod: '20',
+        location: 'Remote',
         roleId: 'role-id2',
-        fileId: ''
+        fileId: '',
+        experience: 1,
     },
     {
         id: 'client-3',
@@ -69,9 +73,11 @@ export const dummyClientsList: ClientType[] = [
         description: '',
         linkedinUrl: '',
         websiteUrl: '',
-        noticePeriod: 30,
+        noticePeriod: '30',
+        location: 'Remote',
         roleId: 'role-id3',
-        fileId: ''
+        fileId: '',
+        experience: 1,
     },
     {
         id: 'client-4',
@@ -83,8 +89,10 @@ export const dummyClientsList: ClientType[] = [
         description: '',
         linkedinUrl: '',
         websiteUrl: '',
-        noticePeriod: 10,
+        noticePeriod: '10',
+        location: 'Remote',
         roleId: 'role-id1',
-        fileId: ''
+        fileId: '',
+        experience: 1,
     },
 ]

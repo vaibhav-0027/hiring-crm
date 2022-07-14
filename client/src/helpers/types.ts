@@ -34,7 +34,9 @@ export interface ClientType {
     description: string;
     linkedinUrl: string;
     websiteUrl: string;
-    noticePeriod: number;
+    noticePeriod: string;
+    location: string;
+    experience: number;
 
     roleId: string;
     fileId: string;

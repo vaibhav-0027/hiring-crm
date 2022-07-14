@@ -19,8 +19,11 @@
 <li><s>authenticate with firebase</s></li>
 <li><s>create users directly on firebase</s></li>
 <li><s>create companies page</s></li>
-<li>create modal for creating and editing company</li>
-<li>create contacts page</li>
+<li><s>create modal for creating and editing company</s></li>
+<li><s>create contacts page</s></li>
+<li><s>add location to client</s></li>
+<li><s>change notice period to string</s></li>
+<li><s>add experience to client</s></li>
 <li></li>
 
 

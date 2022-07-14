@@ -91,7 +91,7 @@ const SearchFilterRow = (props: SearchFilterRowProps) => {
                     >
                         <AddIcon />
                     </motion.div>
-                    Add New Client
+                    Add New Candidate
                 </Button>
             </div>
         </div >

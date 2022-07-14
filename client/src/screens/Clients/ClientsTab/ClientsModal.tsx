@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { ClientType } from '../../../helpers/types';
 import SaveIcon from '@mui/icons-material/Save';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { checkEmptyInput } from '../../../helpers/emptyInputChecker';
 import isEmail from 'validator/lib/isEmail';
 import isURL from 'validator/lib/isURL';
@@ -50,7 +50,9 @@ const ClientsModal = (props: ClientModalProps) => {
     const [currentPackage, setCurrentPackage] = useState<number>(0.0);
     const [expectedPackage, setExpectedPackage] = useState<number>(0.0);
     const [websiteUrl, setWebsiteUrl] = useState<string>('');
-    const [noticePeriod, setNoticePeriod] = useState<number>(0);
+    const [noticePeriod, setNoticePeriod] = useState<string>('');
+    const [location, setLocation] = useState<string>('');
+    const [experience, setExperience] = useState<number>(0);
     const [roleId, setRoleId] = useState<string>('');
 
     useEffect(() => {
@@ -63,7 +65,9 @@ const ClientsModal = (props: ClientModalProps) => {
             setCurrentPackage(0);
             setExpectedPackage(0);
             setWebsiteUrl('');
-            setNoticePeriod(0);
+            setNoticePeriod('');
+            setLocation('');
+            setExperience(0);
             setRoleId('');
             return;
         }
@@ -77,6 +81,8 @@ const ClientsModal = (props: ClientModalProps) => {
         setExpectedPackage(currentSelected.expectedPackage);
         setWebsiteUrl(currentSelected.websiteUrl);
         setNoticePeriod(currentSelected.noticePeriod);
+        setLocation(currentSelected.location);
+        setExperience(currentSelected.experience);
         setRoleId(currentSelected.roleId);
     }, [currentSelected]);
 
@@ -140,6 +146,8 @@ const ClientsModal = (props: ClientModalProps) => {
             expectedPackage,
             websiteUrl,
             noticePeriod,
+            location,
+            experience,
             roleId,
             fileId: DUMMY_UUID,
         };
@@ -263,9 +271,8 @@ const ClientsModal = (props: ClientModalProps) => {
                                 placeholder='Notice period...'
                                 label='Notice period'
                                 value={noticePeriod}
-                                onChange={e => setNoticePeriod(parseInt(e.target.value))}
+                                onChange={e => setNoticePeriod(e.target.value)}
                                 className='w-11/12'
-                                type='number'
                             />
                         </div>
                     </div>
@@ -297,6 +304,29 @@ const ClientsModal = (props: ClientModalProps) => {
                                     })
                                 }
                             </Select>
+                        </div>
+                    </div>
+
+                    <div className='flex flex-row w-full mt-3'>
+                        <div className='w-2/4'>
+                            <TextField
+                                placeholder='Location...'
+                                label='Location'
+                                value={location}
+                                onChange={e => setLocation(e.target.value)}
+                                className='w-11/12'
+                                type='string'
+                            />
+                        </div>
+                        <div className='w-2/4'>
+                            <TextField
+                                placeholder='Experience...'
+                                label='Experience'
+                                value={experience}
+                                onChange={e => setExperience(parseInt(e.target.value))}
+                                className='w-11/12'
+                                type='number'
+                            />
                         </div>
                     </div>
 

@@ -62,7 +62,7 @@ const Clients = () => {
 				/>
 
 				<Tab
-					label='Clients'
+					label='Candidates'
 					value={1}
 					{...a11yProps(1)}
 				/>
