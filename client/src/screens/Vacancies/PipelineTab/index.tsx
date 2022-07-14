@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { CandidateType, VacancyType } from '../../../helpers/types';
+import Button from '@mui/material/Button';
 import Candidate from './Candidate';
 import { dummyCandidateList } from '../../../helpers/dummyVacancies';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
+import { fetchCandidatesForVacancy, updateCandidate } from './apis';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { toast, ToastContainer } from 'react-toastify';
 
 interface PipelineTabProps {
     currentVacancy: VacancyType | null;
@@ -29,25 +33,31 @@ const PipelineTab = (props: PipelineTabProps) => {
     }, [currentVacancy]);
 
     useEffect(() => {
-        const list = dummyCandidateList;
-        let tempData: any = {};
+        if (!currentVacancy) {
+            return;
+        }
 
-        list.map((_current) => {
-            if (_current.vacancyId !== currentVacancy?.id) {
-                return;
-            }
+        (async () => {
+            const list = await fetchCandidatesForVacancy(currentVacancy.id);
+            let tempData: any = {};
 
-            if (!tempData[_current.status]) {
-                tempData[_current.status] = [];
-            }
+            list.map((_current) => {
+                if (_current.vacancyId !== currentVacancy?.id) {
+                    return;
+                }
 
-            tempData[_current.status].push(_current);
-        });
+                if (!tempData[_current.status]) {
+                    tempData[_current.status] = [];
+                }
 
-        setData(tempData);
-    }, []);
+                tempData[_current.status].push(_current);
+            });
 
-    const onDragEnd = (result: DropResult) => {
+            setData(tempData);
+        })();
+    }, [currentVacancy]);
+
+    const onDragEnd = async (result: DropResult) => {
         if (!result.destination) {
             return;
         }
@@ -59,7 +69,7 @@ const PipelineTab = (props: PipelineTabProps) => {
             return;
         }
 
-        let targetVacancy = {};
+        let targetVacancy: any = {};
         let sourceList = data[sourceIdx].filter((_current: CandidateType) => {
             if (_current.id === result.draggableId) {
                 targetVacancy = _current;
@@ -71,11 +81,17 @@ const PipelineTab = (props: PipelineTabProps) => {
 
         targetVacancy = {
             ...targetVacancy,
-            index: targetIdx,
+            status: targetIdx,
         }
 
         let targetList = data[targetIdx] || [];
         targetList.push(targetVacancy);
+
+        let response = await updateCandidate(targetVacancy.id, targetVacancy);
+        if (!response) {
+            toast.error('Server error. Unable to update information!');
+            return;
+        }
 
         let tempData = {
             ...data,
@@ -88,6 +104,8 @@ const PipelineTab = (props: PipelineTabProps) => {
 
     return (
         <div className='h-full' style={{ overflowX: 'scroll', overflowY: 'scroll' }}>
+            <ToastContainer />
+
             <DragDropContext onDragEnd={onDragEnd}>
                 <div className='h-full flex flex-row' style={{}}>
                     {

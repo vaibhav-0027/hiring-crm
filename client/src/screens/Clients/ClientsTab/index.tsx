@@ -93,6 +93,7 @@ const ClientsTab = (props: ClientsTabProps) => {
                 clientsList={currentClientList}
                 setCurrentSelected={setCurrentSelected}
                 setIsModalOpen={setIsModalOpen}
+                currentSelected={currentSelected}
             />
 
             <ClientsModal

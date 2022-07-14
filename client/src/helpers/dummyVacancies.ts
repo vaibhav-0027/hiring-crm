@@ -70,6 +70,7 @@ export const dummyCandidateList: CandidateType[] = [
         clientId: 'user-id-1',
         status: 0,
         description: "some lorem ipsum thing",
+        name: 'random-person'
     },
     {
         id: 'candidate-id-2',
@@ -77,6 +78,7 @@ export const dummyCandidateList: CandidateType[] = [
         clientId: 'user-id-1',
         status: 0,
         description: "some lorem ipsum thing sometyhing longer lorem upsum shit",
+        name: 'random-person'
     },
     {
         id: 'candidate-id-3',
@@ -84,6 +86,7 @@ export const dummyCandidateList: CandidateType[] = [
         clientId: 'user-id-1',
         status: 1,
         description: "some lorem ipsum thing",
+        name: 'random-person'
     },
     {
         id: 'candidate-id-4',
@@ -91,5 +94,6 @@ export const dummyCandidateList: CandidateType[] = [
         clientId: 'user-id-1',
         status: 2,
         description: "some lorem ipsum thing",
+        name: 'random-person'
     },
 ]

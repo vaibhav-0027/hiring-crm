@@ -59,6 +59,7 @@ export interface VacancyType {
 
 export interface CandidateType {
     id: string;
+    name: string;
     status: number;
     description: string;
 

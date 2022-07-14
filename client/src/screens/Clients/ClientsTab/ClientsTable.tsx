@@ -5,10 +5,13 @@ import TablePaginationUnstyled, {
     tablePaginationUnstyledClasses as classes,
 } from '@mui/base/TablePaginationUnstyled';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import VacancySelectorModal from './VacancySelectorModal';
 
 interface ClientsTableProps {
     clientsList: ClientType[];
     setIsModalOpen: (value: boolean) => void;
+    currentSelected: ClientType | null;
     setCurrentSelected: (value: ClientType) => void;
 }
 
@@ -17,9 +20,11 @@ const ClientsTable = (props: ClientsTableProps) => {
     const {
         clientsList,
         setIsModalOpen,
+        currentSelected,
         setCurrentSelected } = props;
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [vacancySelectorModal, setVacancySelectorModal] = React.useState<boolean>(false);
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
@@ -94,6 +99,11 @@ const ClientsTable = (props: ClientsTableProps) => {
         }
         `;
 
+    const _handleAddButton = (info: ClientType) => {
+        setCurrentSelected(info);
+        setVacancySelectorModal(true);
+    }
+
     const _selectRowHandler = (info: ClientType) => {
         setCurrentSelected(info);
         setIsModalOpen(true);
@@ -105,6 +115,12 @@ const ClientsTable = (props: ClientsTableProps) => {
 
     return (
         <Root className='w-full mt-3'>
+            <VacancySelectorModal
+                open={vacancySelectorModal}
+                handleClose={() => setVacancySelectorModal(false)}
+                currentSelected={currentSelected}
+            />
+
             <table className='w-full'>
                 <thead className='w-full'>
                     <tr className='w-full'>
@@ -132,11 +148,16 @@ const ClientsTable = (props: ClientsTableProps) => {
                                         {_client.name}
                                     </span>
                                 </div>
-                                <div className='w-2/12 font-xs'>
+                                <div className='w-full font-xs flex flex-row'>
                                     <OpenInNewIcon
                                         fontSize='inherit'
                                         className='text-primary cursor-pointer'
                                         onClick={() => _openLinkedinProfileHandler(_client.linkedinUrl)}
+                                    />
+                                    <AddCircleOutlineIcon
+                                        className='text-primary cursor-pointer'
+                                        fontSize='inherit'
+                                        onClick={() => _handleAddButton(_client)}
                                     />
                                 </div>
                             </td>

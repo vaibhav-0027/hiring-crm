@@ -35,7 +35,8 @@ func (h *candidateHandler) CreateCandidate(ctx *gin.Context) {
 	var candidate model.Candidate
 	if err := ctx.ShouldBindJSON(&candidate); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
+			"error":     err.Error(),
+			"candidate": candidate,
 		})
 		utils.Logger.Debug(
 			"Received bad request from the client.",

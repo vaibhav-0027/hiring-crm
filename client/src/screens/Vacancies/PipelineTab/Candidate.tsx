@@ -48,7 +48,7 @@ const Candidate = (props: CandidateProps) => {
                                                 {...provided.dragHandleProps}
                                             >
                                                 <Card className='p-1 h-full' sx={{ minHeight: '100px', maxHeight: '100px', overflowX: 'hidden', overflowY: 'scroll' }}>
-                                                    <span>{item.id}</span>
+                                                    <span className='cursor-pointer text-primary'>{item.name}</span>
                                                     <div className='text-xs'>{item.description}</div>
                                                 </Card>
                                             </div>
