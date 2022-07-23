@@ -11,6 +11,8 @@ interface SearchFilterRowProps {
     setIsModalOpen: (value: boolean) => void;
     setCurrentSelected: (value: null) => void;
     companyIdNameMap: any;
+    searchField: string;
+    setSearchField: (value: string) => void;
 }
 
 const SearchFilterRow = (props: SearchFilterRowProps) => {
@@ -20,9 +22,10 @@ const SearchFilterRow = (props: SearchFilterRowProps) => {
         setVacancyList,
         setIsModalOpen,
         setCurrentSelected,
-        companyIdNameMap } = props;
+        companyIdNameMap,
+        searchField,
+        setSearchField } = props;
     const [isHovering, setIsHovering] = useState<boolean>(false);
-    const [searchField, setSearchField] = useState<string>('');
 
     const ltrim = (str: string) => {
         if (!str) return str;

@@ -30,7 +30,6 @@ const style = {
 
 const VacancySelectorModal = (props: VacancySelectorModalProps) => {
 
-
     const {
         open,
         handleClose,
@@ -95,12 +94,15 @@ const VacancySelectorModal = (props: VacancySelectorModalProps) => {
             name: currentSelected.name,
         }
 
-        console.log(req);
-
         const response = await addCandidateForVacancy(req);
-        console.log("response", response);
+
         if (!response) {
             toast.error('Something went wrong!');
+            return;
+        }
+
+        if (response.error === 403) {
+            toast.error("Already exists!");
             return;
         }
 

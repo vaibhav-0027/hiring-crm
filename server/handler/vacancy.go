@@ -58,6 +58,18 @@ func (h *vacancyHandler) CreateVacancy(ctx *gin.Context) {
 		return
 	}
 
+	ch := companyHandler{}
+	company, _ := ch.repo.GetCompanyWithID(vacancy.CompanyID)
+	company.OpenVacancies = company.OpenVacancies + 1
+	_, err = ch.repo.UpdateCompany(company)
+
+	if err != nil {
+		utils.Logger.Warn(
+			"Vacancy created successfully! Could not update open vacancies!",
+			zap.Error(err),
+		)
+	}
+
 	utils.Logger.Debug(
 		"Created Vacancy successfully.",
 		zap.String("vacancy", fmt.Sprint(vacancy)),
@@ -182,6 +194,7 @@ func (h *vacancyHandler) UpdateVacancy(ctx *gin.Context) {
 		return
 	}
 
+	// TODO: if update vacancy has isOpen as false, also update company open vancacies.
 	vacancy.ID = vacancyID
 	vacancy, err = h.repo.UpdateVacancy(vacancy)
 	if err != nil {

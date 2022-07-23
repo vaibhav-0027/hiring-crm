@@ -23,7 +23,12 @@ export const updateCandidate = async (id: string, updatedInfo: CandidateType) =>
 
 export const addCandidateForVacancy = async (info: any) => {
     return dash_api.post(`/candidate/new`, info)
-        .then((res) => {
+        .then((res: any) => {
+            if (res.response.status === 403) {
+                return {
+                    "error": 403,
+                }
+            }
             return res.data;
         })
         .then((data: any) => {

@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -47,8 +48,17 @@ func (h *candidateHandler) CreateCandidate(ctx *gin.Context) {
 
 	candidate, err := h.repo.CreateCandidate(candidate)
 	if err != nil {
+		errMsg := err.Error()
+		if strings.Contains(errMsg, "already exists") {
+			ctx.JSON(http.StatusForbidden, gin.H{
+				"error": errMsg,
+				"msg":   "This candidate already exists!",
+			})
+			return
+		}
+
 		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
+			"error": errMsg,
 		})
 		utils.Logger.Debug(
 			"Internal server error while creating candidate.",

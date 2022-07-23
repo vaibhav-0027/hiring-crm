@@ -93,7 +93,8 @@ const SingleCompany = (props: SingleCompanyProps) => {
                 Open Vacancies:
                 <span
                     className='ml-2 text-primary cursor-pointer'
-                    onClick={_clickHandler}>
+                    onClick={_clickHandler}
+                >
                     {info.openVacancies}
                 </span>
             </div >

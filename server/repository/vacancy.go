@@ -6,7 +6,6 @@ import (
 	"github.com/google/uuid"
 	"go.uber.org/zap"
 
-	// "github.com/jinzhu/gorm"
 	"github.com/vaibhav-0027/hiring-crm/model"
 	"github.com/vaibhav-0027/hiring-crm/utils"
 	"gorm.io/gorm"

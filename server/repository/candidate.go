@@ -4,8 +4,11 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
+	"go.uber.org/zap"
+
 	// "github.com/jinzhu/gorm"
 	"github.com/vaibhav-0027/hiring-crm/model"
+	"github.com/vaibhav-0027/hiring-crm/utils"
 	"gorm.io/gorm"
 )
 
@@ -28,7 +31,6 @@ func NewCandidateRepository() CandidateRepository {
 }
 
 func (db *candidateRepository) CreateCandidate(candidate model.Candidate) (model.Candidate, error) {
-	// check if clientID is valid
 	err := db.connection.First(&model.Client{}, candidate.ClientID).Error
 	if err != nil {
 		return candidate, fmt.Errorf("required foreign key id does not exist")
@@ -39,19 +41,41 @@ func (db *candidateRepository) CreateCandidate(candidate model.Candidate) (model
 		return candidate, fmt.Errorf("required foreign key id does not exist")
 	}
 
-	// check if vacancyID is valid
+	var foundCandidate []model.Candidate
+	_ = db.connection.Find(&foundCandidate, "client_id=?", candidate.ClientID).Error
+
+	var exists bool = false
+	for i := 0; i < len(foundCandidate); i++ {
+		if foundCandidate[i].VacancyID == candidate.VacancyID {
+			exists = true
+			break
+		}
+	}
+
+	utils.Logger.Debug(
+		"While creating candidate",
+		zap.String("client id", candidate.ClientID.String()),
+		zap.String("vacancy id", candidate.VacancyID.String()),
+		zap.Bool("exists", exists),
+	)
+
+	if exists {
+		return candidate, fmt.Errorf(
+			"candidate with client_id: %s and vacancy_id: %s already exists",
+			candidate.ClientID,
+			candidate.VacancyID,
+		)
+	}
 
 	return candidate, db.connection.Create(&candidate).Error
 }
 
 func (db *candidateRepository) GetCandidateWithID(id uuid.UUID) (candidate model.Candidate, err error) {
 	return candidate, db.connection.First(&candidate, id).Error
-
 }
 
 func (db *candidateRepository) GetCandidateListForVacancy(id uuid.UUID) (candidateList []model.Candidate, err error) {
 	return candidateList, db.connection.Order("updated_at desc").Find(&candidateList, "vacancy_id=?", id).Error
-
 }
 
 func (db *candidateRepository) UpdateCandidate(candidate model.Candidate) (model.Candidate, error) {

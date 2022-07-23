@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { ToastContainer } from 'react-toastify';
-import { dummyCompanyIdNameMap, dummyVacancyList } from '../../../helpers/dummyVacancies';
 import { VacancyType } from '../../../helpers/types';
 import { fetchCompanyIdNameMap } from '../../Companies/apis';
 import { fetchVacanciesList } from './apis';
@@ -21,24 +20,32 @@ const VacanciesTab = (props: VacancyTabProps) => {
     const [currentVacancyList, setCurrentVacancyList] = useState<VacancyType[]>([]);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [currentSelected, setCurrentSelected] = useState<VacancyType | null>(null);
-    const [companyIdNameMap, setCompanyIdNameMap] = useState<object>({});
+    const [companyIdNameMap, setCompanyIdNameMap] = useState<any>({});
+    const [searchField, setSearchField] = useState<string>('');
     const [updatedVacancyInfo, setUpdatedVacancyInfo] = useState<VacancyType | null>(null);
 
     useEffect(() => {
 
         (async () => {
-            const data = await fetchVacanciesList();
-            setFullVacancyList(data);
-            setCurrentVacancyList(data);
-        })()
-
-    }, []);
-
-    useEffect(() => {
-
-        (async () => {
-            const data = await fetchCompanyIdNameMap();
+            const data: any = await fetchCompanyIdNameMap();
             setCompanyIdNameMap(data);
+
+            const data1 = await fetchVacanciesList();
+
+            var query = window.location.search.split('query=')[1] || "";
+            query = query.replace("%20", " ");
+            setSearchField(query);
+
+            setFullVacancyList(data1);
+            if (query !== "") {
+                setCurrentVacancyList(data1.filter(_current => {
+                    if (data[_current.companyId] === query) {
+                        return _current;
+                    }
+                }));
+            } else {
+                setCurrentVacancyList(data1);
+            }
         })()
 
     }, []);
@@ -104,6 +111,8 @@ const VacanciesTab = (props: VacancyTabProps) => {
                 setIsModalOpen={setIsModalOpen}
                 setCurrentSelected={setCurrentSelected}
                 companyIdNameMap={companyIdNameMap}
+                searchField={searchField}
+                setSearchField={setSearchField}
             />
 
             <VacanciesTable
