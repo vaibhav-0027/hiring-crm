@@ -2,7 +2,7 @@ import { Button, FormGroup, Input } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import LockIcon from '@mui/icons-material/Lock';
 import isEmail from 'validator/lib/isEmail';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
 import { signInWithEmailAndPassword, UserCredential } from "firebase/auth";
 import { auth } from "../../helpers/firebase";
@@ -70,8 +70,6 @@ const LoginPage = () => {
 
     return (
         <div className='login-container'>
-            <ToastContainer />
-
             <div className="bubbles">
                 <div className="bubble"></div>
                 <div className="bubble"></div>

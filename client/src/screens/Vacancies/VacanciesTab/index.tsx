@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { ToastContainer } from 'react-toastify';
 import { VacancyType } from '../../../helpers/types';
 import { fetchCompanyIdNameMap } from '../../Companies/apis';
 import { fetchVacanciesList } from './apis';
@@ -103,8 +102,6 @@ const VacanciesTab = (props: VacancyTabProps) => {
 
     return (
         <div>
-            <ToastContainer />
-
             <SearchFilterRow
                 vacancyList={fullVacancyList}
                 setVacancyList={setCurrentVacancyList}

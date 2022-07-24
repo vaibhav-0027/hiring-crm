@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { RoleType } from '../../../helpers/types';
 import SaveIcon from '@mui/icons-material/Save';
 import { checkEmptyInput } from '../../../helpers/emptyInputChecker';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { DUMMY_UUID } from '../../../helpers/constants';
 import { addRoleInfo, updateRoleInfo } from './apis';
 
@@ -102,7 +102,6 @@ const RolesModal = (props: RolesModalProps) => {
     return (
         <Modal open={open} onClose={handleClose}>
             <Box sx={style}>
-                <ToastContainer />
                 <div className='text-2xl text-primary ml-2 font-bold'>
                     {currentSelected ? 'Edit' : 'Add new'}
                     <span className='ml-2'>role</span>

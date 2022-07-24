@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { toast, ToastContainer } from 'react-toastify';
-import { dummyClientsList, dummyRoleIdNameMap } from '../../../helpers/dummyClients';
+import { toast } from 'react-toastify';
 import { ClientType, RoleType } from '../../../helpers/types';
 import { fetchRolesIdNameMap } from '../RolesTab/apis';
 import { fetchClientsListForRole } from './apis';
@@ -25,6 +24,7 @@ const ClientsTab = (props: ClientsTabProps) => {
 
     useEffect(() => {
         if (!currentRole) {
+            toast.error("Select a role first!");
             return;
         }
 
@@ -80,8 +80,6 @@ const ClientsTab = (props: ClientsTabProps) => {
 
     return (
         <div>
-            <ToastContainer />
-
             <SearchFilterRow
                 clientsList={fullClientsList}
                 setClientsList={setCurrentClientList}
@@ -96,13 +94,14 @@ const ClientsTab = (props: ClientsTabProps) => {
                 currentSelected={currentSelected}
             />
 
-            <ClientsModal
+            {currentRole && <ClientsModal
                 currentSelected={currentSelected}
                 handleClose={() => setIsModalOpen(false)}
                 open={isModalOpen}
                 roleIdNameMap={roleIdNameMap}
                 setUpdatedClientInfo={setUpdatedClientInfo}
-            />
+                currentRoleId={currentRole.id}
+            />}
         </div>
     )
 }

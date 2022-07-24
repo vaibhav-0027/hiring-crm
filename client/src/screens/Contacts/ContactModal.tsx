@@ -7,7 +7,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import isEmail from 'validator/lib/isEmail';
 import isURL from 'validator/lib/isURL';
 import { checkEmptyInput } from '../../helpers/emptyInputChecker';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { DUMMY_UUID } from '../../helpers/constants';
 import { addContactInfo, updateContactInfo } from './apis';
 
@@ -179,8 +179,6 @@ const ContactModal = (props: ContactModalProps) => {
     return (
         <Modal open={open} onClose={handleClose}>
             <Box sx={style}>
-                <ToastContainer />
-
                 <div className='text-2xl text-primary ml-2 font-bold'>
                     {currentSelected ? 'Edit' : 'Add new'}
                     <span className='ml-2'>contact</span>

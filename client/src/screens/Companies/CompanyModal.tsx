@@ -2,7 +2,7 @@ import { Box, Button, Modal, TextareaAutosize, TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import SaveIcon from '@mui/icons-material/Save';
 import { CompanyType } from '../../helpers/types';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { checkEmptyInput } from '../../helpers/emptyInputChecker';
 import { addCompanyInfo, updateCompanyInfo } from './apis';
 import { DUMMY_UUID } from '../../helpers/constants';
@@ -132,8 +132,6 @@ const CompanyModal = (props: NewCompanyModalProps) => {
             onClose={handleClose}
         >
             <Box sx={style}>
-                <ToastContainer />
-
                 <div className='text-2xl text-primary ml-2 font-bold'>
                     {currentSelected ? 'Edit' : 'Add'}
                     <span className='ml-2'>company info</span>

@@ -17,6 +17,7 @@ interface ClientModalProps {
     currentSelected: ClientType | null;
     roleIdNameMap: any;
     setUpdatedClientInfo: (value: ClientType) => void;
+    currentRoleId: string;
 }
 
 const style = {
@@ -40,7 +41,8 @@ const ClientsModal = (props: ClientModalProps) => {
         handleClose,
         currentSelected,
         roleIdNameMap,
-        setUpdatedClientInfo } = props;
+        setUpdatedClientInfo,
+        currentRoleId } = props;
 
     const [name, setName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
@@ -68,7 +70,7 @@ const ClientsModal = (props: ClientModalProps) => {
             setNoticePeriod('');
             setLocation('');
             setExperience(0);
-            setRoleId('');
+            setRoleId(currentRoleId);
             return;
         }
 
@@ -191,8 +193,6 @@ const ClientsModal = (props: ClientModalProps) => {
     return (
         <Modal open={open} onClose={handleClose}>
             <Box sx={style}>
-                {/* <ToastContainer /> */}
-
                 <div className='text-2xl text-primary ml-2 font-bold'>
                     {currentSelected ? 'Edit' : 'Add new'}
                     <span className='ml-2'>client</span>

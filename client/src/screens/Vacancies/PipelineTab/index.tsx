@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { CandidateType, VacancyType } from '../../../helpers/types';
-import Button from '@mui/material/Button';
 import Candidate from './Candidate';
-import { dummyCandidateList } from '../../../helpers/dummyVacancies';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { fetchCandidatesForVacancy, updateCandidate } from './apis';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 interface PipelineTabProps {
     currentVacancy: VacancyType | null;
@@ -20,6 +17,7 @@ const PipelineTab = (props: PipelineTabProps) => {
 
     useEffect(() => {
         if (!currentVacancy) {
+            toast.error("Select a vacancy first!");
             return;
         }
 
@@ -102,10 +100,16 @@ const PipelineTab = (props: PipelineTabProps) => {
         setData(tempData);
     };
 
+    if (!currentVacancy) {
+        return (
+            <div className='font-bold text-2xl'>
+                No vacancy has been selected!
+            </div>
+        )
+    }
+
     return (
         <div className='h-full' style={{ overflowX: 'scroll', overflowY: 'scroll' }}>
-            <ToastContainer />
-
             <DragDropContext onDragEnd={onDragEnd}>
                 <div className='h-full flex flex-row' style={{}}>
                     {
