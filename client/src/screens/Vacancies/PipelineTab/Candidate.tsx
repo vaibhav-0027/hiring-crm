@@ -1,7 +1,7 @@
 import React from 'react'
 import { CandidateType } from '../../../helpers/types';
 import { Draggable, DraggableProvided, DraggableStateSnapshot, Droppable } from "react-beautiful-dnd";
-import { Card } from '@mui/material';
+import CandidateCard from './CandidateCard';
 
 interface CandidateProps {
     elements: CandidateType[];
@@ -47,10 +47,9 @@ const Candidate = (props: CandidateProps) => {
                                                 {...provided.draggableProps}
                                                 {...provided.dragHandleProps}
                                             >
-                                                <Card className='p-1 h-full' sx={{ minHeight: '100px', maxHeight: '100px', overflowX: 'hidden', overflowY: 'scroll' }}>
-                                                    <span className='cursor-pointer text-primary'>{item.name}</span>
-                                                    <div className='text-xs'>{item.description}</div>
-                                                </Card>
+                                                <CandidateCard
+                                                    item={item}
+                                                />
                                             </div>
                                         )
                                     }
