@@ -60,7 +60,7 @@ func (h *vacancyHandler) CreateVacancy(ctx *gin.Context) {
 
 	ch := companyHandler{}
 	company, _ := ch.repo.GetCompanyWithID(vacancy.CompanyID)
-	company.OpenVacancies = company.OpenVacancies + 1
+	company.OpenVacancies = company.OpenVacancies + vacancy.CountOpen
 	_, err = ch.repo.UpdateCompany(company)
 
 	if err != nil {
@@ -194,6 +194,7 @@ func (h *vacancyHandler) UpdateVacancy(ctx *gin.Context) {
 		return
 	}
 
+	// TODO: update company open vacancies when updating the number of open count for vacancy.
 	// TODO: if update vacancy has isOpen as false, also update company open vancacies.
 	vacancy.ID = vacancyID
 	vacancy, err = h.repo.UpdateVacancy(vacancy)

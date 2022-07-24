@@ -1,7 +1,7 @@
 import { styled, CSSObject, Theme } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import HomeIcon from '@mui/icons-material/Home';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import BusinessIcon from '@mui/icons-material/Business';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -13,8 +13,16 @@ import { OverridableComponent } from '@mui/material/OverridableComponent';
 import { useHistory } from 'react-router-dom';
 
 const Drawer = () => {
-    const drawerWidth = 240;
+    const drawerWidth = 200;
     const history = useHistory();
+
+    const [location, setLocation] = useState<string>('/home');
+
+    useEffect(() => {
+        const href = window.location.href;
+        const temp = href.split('/');
+        setLocation("/" + temp[temp.length - 1]);
+    });
 
     const openedMixin = (theme: Theme): CSSObject => ({
         width: drawerWidth,
@@ -69,7 +77,14 @@ const Drawer = () => {
         }
 
         return (
-            <ListItem onClick={_clickHandler} key={text} disablePadding sx={{ display: 'block' }}>
+            <ListItem
+                onClick={_clickHandler}
+                key={text}
+                disablePadding
+                sx={location === link ? {
+                    "backgroundColor": "#bbcff0",
+                } : {}}
+            >
                 <ListItemButton
                     sx={{
                         minHeight: 48,
